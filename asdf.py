@@ -1,0 +1,4 @@
+
+
+# class PartNum(MetaDate)
+#     partnum: = 
