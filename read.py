@@ -6,26 +6,28 @@ import xml.etree.ElementTree as ET
 from inspect import getmembers, isclass,isfunction
 
 
-# # *********************************************************************
-
-# #Getting the correct filepath
-# files = glob.glob(r"X:\PROGRAMMING\CUSTOMER\CROSSROADS\MPJ Plate\260224-5V10D18_REVC\Current\*")
-# parent_directory = "X:\PROGRAMMING\CUSTOMER"
-# partnum = 'DRW-02446-01'
-# filePath = glob.glob(fr"{parent_directory}\**\*{partnum}*.tls", recursive=True)
-# print("****************************************************************\n\n")
-# print(filePath)
-# print("****************************************************************\n\n")
-# if filePath:
-#     latest_file = max(filePath, key=os.path.getmtime)
-#     print("Latest modified file:", latest_file)
-# else:
-#     print("No files matching the pattern found.")
-
-# # *********************************************************************
 
 
-tree = ET.parse(r'X:\PROGRAMMING\CUSTOMER\SKELETAL DYNAMICS\RADIAL HEAD PLATE, EXTENDED\DRW-02446-01_revRAB\VERICUT\RD_5-9-23_DRW-02446-01_revRAB2-Toolpath Group-1.tls  ')
+# *********************************************************************
+
+#Getting the correct filepath
+files = glob.glob(r"X:\PROGRAMMING\CUSTOMER\CROSSROADS\MPJ Plate\260224-5V10D18_REVC\Current\*")
+parent_directory = "X:\PROGRAMMING\CUSTOMER"
+partnum = 'DRW-02446-01'
+filePath = glob.glob(fr"{parent_directory}\**\*{partnum}*.tls", recursive=True)
+print("****************************************************************\n\n")
+print(filePath)
+print("****************************************************************\n\n")
+if filePath:
+    latest_file = max(filePath, key=os.path.getmtime)
+    print("Latest modified file:", latest_file)
+else:
+    print("No files matching the pattern found.")
+
+# *********************************************************************
+
+
+tree = ET.parse(latest_file)
 
 root = tree.getroot()
 parent_elements = root.findall(".//Tools/Tool/Cutter")
@@ -129,26 +131,111 @@ with engine.connect() as conn:
 
     
 
-
-from flask import Flask, request, render_template
+from flask import Flask, render_template
+import streamlit as st
+import plotly.express as px
 import pandas as pd
-app = Flask(__name__)
-
+import openpyxl
+import json
+# from streamlit_pandas_profiling import st_profile_report
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # Read Excel data using pandas
-    df = pd.read_excel('C:\FinalVsCodeProject\output.xlsx')
-    
-    # Convert DataFrame to a list of lists for Handsontable
-    data = df.values.tolist()
-    
-    # Get column headers
-    headers = df.columns.tolist()
-    
-    return render_template('main.html', data=data, headers=headers)
+    data = "Hello from Python variable!"
+    return render_template('excel.html', data_list=json.dumps(rowsPart))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
+
+
+
+
+# def main():
+#     # Set page title
+#     st.title("Excel File Editor")
+
+#     # Define the file path
+#     file_path = "C:\\FinalVsCodeProject\\output.xlsx"
+
+#     try:
+#         # Read Excel data using pandas
+#         df = pd.read_excel(file_path)
+
+#         # Display the editable table using st.table
+#         editable_df = df.copy()
+#         editable_table = st.table(editable_df)
+
+#         # Handle cell editing using JavaScript code
+#         script = """
+#         <script>
+#         const table = document.getElementsByTagName('table')[0];
+#         table.addEventListener('click', function(event) {
+#             const row = event.target.closest('tr');
+#             const cell = event.target.closest('td');
+#             if (cell && cell.contentEditable !== 'true') {
+#                 cell.contentEditable = 'true';
+#                 cell.focus();
+#             }
+#         });
+
+#         table.addEventListener('blur', function(event) {
+#             const cell = event.target.closest('td');
+#             if (cell && cell.contentEditable === 'true') {
+#                 cell.contentEditable = 'false';
+#             }
+#         });
+
+#         table.addEventListener('keydown', function(event) {
+#             const cell = event.target.closest('td');
+#             if (cell && cell.contentEditable === 'true' && event.key === 'Enter') {
+#                 event.preventDefault();
+#                 cell.contentEditable = 'false';
+#             }
+#         });
+#         </script>
+#         """
+
+#         # Add the JavaScript code to the Streamlit app
+#         st.markdown(script, unsafe_allow_html=True)
+
+#         # Update the DataFrame with edited cell values
+#         for i, row in enumerate(editable_df.values):
+#             for j, value in enumerate(row):
+#                 cell_id = f"cell-{i}-{j}"
+#                 cell_value = st.text_input("", value, key=cell_id)
+#                 editable_df.iloc[i, j] = cell_value
+
+#         # Save the changes to the Excel file
+#         with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+#             writer.book = openpyxl.load_workbook(file_path)
+#             editable_df.to_excel(writer, index=False, sheet_name='Sheet1')
+#             writer.save()
+
+#         st.success("Cell values updated successfully!")
+
+#     except FileNotFoundError:
+#         st.error("File not found. Please make sure the file path is correct.")
+
+# if __name__ == '__main__':
+#     main()
+# app = Flask(__name__)
+
+# app = Flask(__name__)
+
+# @app.route('/')
+# def index():
+#     # Read Excel data using pandas
+#     df = pd.read_excel('C:\FinalVsCodeProject\output.xlsx')
+    
+#     # Convert DataFrame to a list of lists for Handsontable
+#     data = df.values.tolist()
+    
+#     # Get column headers
+#     headers = df.columns.tolist()
+    
+#     return render_template('main.html', data=data, headers=headers)
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
 

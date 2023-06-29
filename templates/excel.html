@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .success-message {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Form Submitted Successfully</h2>
+        <p><strong>Part Number:</strong> {{ part_number }}</p>
+        <p><strong>Revision Number:</strong> {{ revision_number }}</p>
+        <p><strong>Filepath:</strong> {{ dropdown }}</p>
+    </div>
+</body>
+</html>
+
+
