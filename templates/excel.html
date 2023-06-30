@@ -24,6 +24,24 @@
             text-align: center;
             margin-bottom: 20px;
         }
+            .styled-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #4CAF50;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .styled-button:hover {
+        background-color: #45a049;
+    }
+
+    .styled-button:active {
+        background-color: #3c9039;
+    }
     </style>
 </head>
 <body>
@@ -32,6 +50,9 @@
         <p><strong>Part Number:</strong> {{ part_number }}</p>
         <p><strong>Revision Number:</strong> {{ revision_number }}</p>
         <p><strong>Filepath:</strong> {{ dropdown }}</p>
+        <form action="{{ url_for('process') }}" method="POST">
+            <button class="styled-button" type="submit">Process</button>
+        </form>
     </div>
 </body>
 </html>
