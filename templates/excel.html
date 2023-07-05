@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Success</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,6 +44,22 @@
     .styled-button:active {
         background-color: #3c9039;
     }
+    table {
+            width: 100%;
+            
+        }
+    th, td {
+        padding: 8px;
+        border: 1px solid #ccc;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
     </style>
 </head>
 <body>
@@ -50,11 +68,53 @@
         <p><strong>Part Number:</strong> {{ part_number }}</p>
         <p><strong>Revision Number:</strong> {{ revision_number }}</p>
         <p><strong>Filepath:</strong> {{ dropdown }}</p>
-        <form action="{{ url_for('process') }}" method="POST">
+        <form method="POST">
             <button class="styled-button" type="submit">Process</button>
         </form>
+        <form method="post" action="/success">
+            <table id="data">
+                <thead>
+                    <tr>
+                        {% for header in headers %}
+                            <th>{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                        <tr>
+                            {% for cell in row %}
+                                <td contenteditable="true">{{ cell }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <button type="submit">Save Changes</button>
+            {% for row in data %}
+                {% for cell in row %}
+                    <input type="hidden" name="edited_data[]" value="{{ cell }}">
+                {% endfor %}
+            {% endfor %}
+        </form>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Add event listeners to the table cells for editing
+                const cells = document.querySelectorAll('#data td');
+        
+                cells.forEach(cell => {
+                    cell.addEventListener('input', () => {
+                        cell.setAttribute('data-edited', 'true');
+                    });
+                });
+            });
+        </script>
     </div>
+    
 </body>
+</script>
 </html>
 
 

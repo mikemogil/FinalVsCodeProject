@@ -54,6 +54,7 @@ from sqlalchemy.engine.url import URL
 from sqlalchemy.engine import Engine   
 from sqlalchemy import create_engine, MetaData, Table
 import sqlalchemy as db
+from openpyxl import Workbook
 
 
 E10_conn_args = {
@@ -81,14 +82,21 @@ finalList = [item for item in idlist]
 # Execute the query
 
 queryPart = db.text("""
-    SELECT p2.PartNum, p2.PartDescription
+    SELECT p2.PartNum, p2.PartDescription, pm.QtyPer 
     FROM dbo.Part p
     LEFT OUTER JOIN dbo.PartMtl pm ON p.PartNum = pm.PartNum
     LEFT OUTER JOIN dbo.Part p2 ON p2.PartNum = pm.MtlPartNum
-    WHERE p.PartNum = 'ET1-302807-10' AND p2.partnum IN :idlist
+    WHERE p.PartNum = 'ET1-302807-10'And pm.RevisionNum = 'F' AND p2.partnum IN :idlist
     ORDER BY pm.MtlSeq
     """
 )
+# # SELECT p2.PartNum, p2.PartDescription, jh.RevisionNum 
+#     FROM dbo.Part p
+#     LEFT OUTER JOIN dbo.PartMtl pm ON p.PartNum = pm.PartNum
+#     LEFT OUTER JOIN dbo.Part p2 ON p2.PartNum = pm.MtlPartNum
+#     LEFT OUTER JOIN dbo.JobHead jh On p.PartNum = jh.PartNum 
+#     WHERE p.PartNum = 'ET1-302807-10' AND jh.RevisionNum = 'F' And p2.partnum IN ('T80836', 'T80868', '902531-C3', '05-0047', 'VQ4SVBR0150', '36210-C3', '36210-C3', 'T70026', '26340-C3', '53631-C6', '24662-C3', '24662-C3', '74331-C3', '01012', '65108-C3', '26340-C3', '33420-C3', '28145-C3', '28145-C3', '13037', '71030-C3', '67839-C3', '997962-C3')
+#     ORDER BY pm.MtlSeq
 
 queryJobNum = db.text("""
     SELECT JobHead.JobNum
@@ -118,10 +126,13 @@ queryPart = queryPart.bindparams(idlist = finalList)
 
     
 rowsPart = list(connection.execute(queryPart).fetchall())
-rowsJob = list(connection.execute(queryJobNum).fetchall())
+rowsJob = list(connection.execute(queryJobNum).mappings().fetchall())
+# if len(rowsJob == 1): rowsJob = rowsJob[0]
 
 all_data = []
-     
+for job in rowsJob:
+    print(job['JobNum'])  
+
 existing_ids = [row[0] for row in rowsPart]
 non_existing_ids = [id for id in finalList if id not in existing_ids]
 print("Non-existing IDs:", non_existing_ids)
@@ -139,7 +150,35 @@ queryNew = db.text(("""
 ))
 
 partNew = queryNew.bindparams(non_existing_ids = non_existing_ids)
-
 partNew = list(connection.execute(partNew).fetchall())
-print("New Parts added:",partNew)
+partnewList = partNew
+jobscurrent = []
+start_sequence_number = 1020
+increment = 10
+revNum = 'B'
+rowsPart = [('ET1-302807-10', part[0], part[1], part[2], start_sequence_number + i * increment, revNum)for i, part in enumerate(rowsPart)]
+startSeq = rowsPart[-1]
+updated_part_new = [('ET1-302807-10',part[0], part[1], 0.01, startSeq[4] + i * increment, revNum) for i,part in enumerate(partNew)]
 
+all_data = rowsPart + updated_part_new
+print (rowsPart + updated_part_new)
+import openpyxl
+prb = openpyxl.Workbook()
+partRevBom = prb.active
+column_headers = ['PartNum', 'RevisionNum','MtlSeq', 'MtlPartNum', 'QtyPer', 'RelatedOperation', 'UOMCode', 'Plant', 'ECOGroupID', 'Company' ]
+partRevBom.append(column_headers)
+for row in all_data:
+    partRevBom.append([row[0], row[5], row[4], row[1], row[3], 10, 'Tool', 'MFgSys', 'mdieckman', 'JPMC'])
+prb.save('data_sheet.xlsx')
+
+for eachJob in rowsJob:
+    
+    for job in all_data:
+        jobscurrent.append([eachJob['JobNum'], job[4], job[1], job[3],'Tool', 0, 10, 'MFgSys', 'JPMC', job[2]])
+jbm = openpyxl.Workbook()
+jobBom = jbm.active
+column_headers = ['JobNum', 'MtlSeq','PartNum', 'QtyPer','IUM','AssemblySeq', 'RelatedOperation', 'Plant', 'Company', 'Description' ]
+jobBom.append(column_headers)
+for row in jobscurrent:
+    jobBom.append(row)
+jbm.save('data_sheet2.xlsx')
