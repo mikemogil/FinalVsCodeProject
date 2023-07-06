@@ -2,74 +2,101 @@ from flask import Flask, render_template, request, redirect, url_for
 import os
 import json
 from data_file import part
+from excelBuilder import pnrn
+
 import openpyxl
 directory_path = r"X:\PROGRAMMING\CUSTOMER"
 dropdown = [folder for folder in os.listdir(directory_path) if os.path.isdir(os.path.join(directory_path, folder))]
 
 app = Flask(__name__)
-part_number = ''
 # data_file.engine
-def partnumber():
-    return partnumber
+
 @app.route('/')
 def form():
-    
-
     return render_template('main.html', dropdown = dropdown)
+
+
 
 @app.route('/submit-form', methods=['POST'])
 def submit_form():
     part_number = request.form['partNumber']
     revision_number = request.form['revisionNumber']
     
+
     dropdown_value = request.form["dropdown"]
     dropdown_value = str(dropdown_value)
     datainfo = part(part_number, revision_number, dropdown_value)
     return redirect(url_for('success', file= datainfo[2], part_number=part_number, revision_number=revision_number, dropdown=dropdown_value))
-def partnumber():
-    return part_number
+
+
 
 
 @app.route('/success', methods=['GET', 'POST'])
 def success():
+
+    print(list(request.args.keys()), "**************************hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh**********************")
+    part_number = request.args.get('part_number')
+    revision_number = request.args.get('revision_number')
+    dropdown_value = request.args.get('dropdown')
+    part_number = 'DRW-02446-01'
+    revision_number = 'RAB'
     if request.method == 'POST':
         # Get the edited data from the form
-        edited_data = request.form.getlist('edited_data[]')
-        print(edited_data)
+        edited_dataPRB = request.form.getlist('edited_dataPRB')
+        edited_dataJB = request.form.getlist('edited_dataJB')
+
+       
         # Load the Excel file
-        workbook_path = 'C:\FinalVsCodeProject\data_sheet.xlsx'
-        workbook = openpyxl.load_workbook(workbook_path)
-        sheet = workbook.active
+        workbook_pathPRB = f'C:\FinalVsCodeProject\PRB,{part_number},{revision_number}.xlsx'
+        workbook_pathJB = f'C:\FinalVsCodeProject\JB,{part_number},{revision_number}.xlsx' 
+        workbookPRB = openpyxl.load_workbook(workbook_pathPRB)
+        workbookJB = openpyxl.load_workbook(workbook_pathJB)
+        sheetPRB = workbookPRB.active
+        sheetJB = workbookJB.active
 
         # Update the corresponding cells in the Excel sheet
-        for i, value in enumerate(edited_data):
-            row_number = i // sheet.max_column + 2  # Add 2 to skip the header row
-            col_number = i % sheet.max_column + 1
-            sheet.cell(row=row_number, column=col_number).value = value
+        for i, value in enumerate(edited_dataPRB):
+            row_number = i // sheetPRB.max_column + 2  # Add 2 to skip the header row
+            col_number = i % sheetPRB.max_column + 1
+            sheetPRB.cell(row=row_number, column=col_number).value = value
+
+        for i, value in enumerate(edited_dataJB):
+            row_number = i // sheetJB.max_column + 2  # Add 2 to skip the header row
+            col_number = i % sheetJB.max_column + 1
+            sheetJB.cell(row=row_number, column=col_number).value = value
 
         # Save the changes back to the Excel file
-        workbook.save(workbook_path)
+        workbookPRB.save(workbook_pathPRB)
+        workbookJB.save(workbook_pathJB)
 
         # Redirect to the success page
         return redirect('/success')
     else:
         # Get the initial data from the Excel sheet
-        part_number = request.args.get('part_number')
-        revision_number = request.args.get('revision_number')
-        dropdown_value = request.args.get('dropdown')
+        
 
-        workbook_path = 'C:\FinalVsCodeProject\data_sheet.xlsx'
-        workbook = openpyxl.load_workbook(workbook_path)
-        sheet = workbook.active
+        workbook_pathPRB = f'C:\FinalVsCodeProject\PRB,{part_number},{revision_number}.xlsx'
+        workbook_pathJB = f'C:\FinalVsCodeProject\JB,{part_number},{revision_number}.xlsx' 
 
-        headers = [cell.value for cell in sheet[1]]
-        data = []
-        for row in sheet.iter_rows(min_row=2, values_only=True):
-            data.append(row)
+        workbookPRB = openpyxl.load_workbook(workbook_pathPRB)
+        workbookJB = openpyxl.load_workbook(workbook_pathJB)
+        sheetPRB = workbookPRB.active
+        sheetJB = workbookJB.active
+
+        headersPRB = [cell.value for cell in sheetPRB[1]]
+        headersJB = [cell.value for cell in sheetJB[1]]
+        dataPRB = []
+        dataJB = []
+        for rowPRB in sheetPRB.iter_rows(min_row=2, values_only=True):
+            dataPRB.append(rowPRB)
+
+        for rowJB in sheetJB.iter_rows(min_row=2, values_only=True):
+                    dataJB.append(rowJB)
 
         return render_template('excel.html', part_number=part_number, revision_number=revision_number,
-                               dropdown=dropdown_value, headers=headers, data=data)
+                               dropdown=dropdown_value, headersPRB=headersPRB, dataPRB=dataPRB, dataJB = dataJB, headersJB = headersJB)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
+    # , host='phl-ws-0025', port=8050
 
