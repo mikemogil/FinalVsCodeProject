@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Files</title>
+</head>
+<body>
+    <form method="post" action="/choosingfiles">
+        <h2>Select Files</h2>
+        {% for file in files %}
+        <label>
+            <input type="checkbox" name="selected_files" value="{{ file }}">{{ file }}
+        </label>
+        <br>
+        {% endfor %}
+        <button type="submit">Process Selected Files</button>
+    </form>
+</body>
+</html>
