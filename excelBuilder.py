@@ -1,18 +1,24 @@
 
 partNumber = ''
 revnum = ''
-def ExcelFiles(partNumber, partNew, rowsJob, rowsPart,revnum):
+def ExcelFiles(partNumber, partNew, rowsJob, rowsPart,revnum, non_Existing_ID):
     partNumber = partNumber
     revnum = revnum
     all_data = []
     jobscurrent = []
     start_sequence_number = 1020
     increment = 10
-    rowsPart = [(partNumber, part[0], part[1], part[2], start_sequence_number + i * increment, revnum)for i, part in enumerate(rowsPart)]
-    startSeq = rowsPart[-1]
-    updated_part_new = [(partNumber,part[0], part[1], 0.01, startSeq[4] + i * increment, revnum) for i,part in enumerate(partNew)]
+    startSeq = 1020
+    rowsPart = [(partNumber, part[0], part[1], part[2], "**", revnum)for i, part in enumerate(rowsPart)]
+  
+    
+    
+    updated_part_new = [(partNumber,part[0], part[1], 0.01, "***", revnum) for i,part in enumerate(partNew)]
+    if len(non_Existing_ID)>0:
+        all_data = rowsPart + updated_part_new
+    else:
+        all_data = rowsPart
 
-    all_data = rowsPart + updated_part_new
     print (rowsPart + updated_part_new)
     import openpyxl
     prb = openpyxl.Workbook()

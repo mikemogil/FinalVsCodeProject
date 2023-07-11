@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
 import json
-from data_file import part
-from excelBuilder import pnrn
+from data_file import part, getDescription
 import openpyxl
 from findfile import get_latest_file_path, id_list_from_file
 directory_path = r"X:\PROGRAMMING\CUSTOMER"
@@ -35,6 +34,7 @@ def submit_form():
         revision_number = request.form['revisionNumber']
         dropdown_value = request.form['dropdown_value']
         filepaths = get_latest_file_path(part_number,dropdown_value)
+        print(filepaths[1])
         return render_template('files.html', part_number=part_number, revision_number=revision_number, dropdown_value=dropdown_value, selected_files = filepaths[0], latest_file = filepaths[1])
     
 
@@ -62,17 +62,60 @@ def success():
         sheetJB = workbookJB.active
         sheetPRB.delete_rows(2, sheetPRB.max_row)
         sheetJB.delete_rows(2, sheetJB.max_row)
-        # Update the corresponding cells in the Excel sheet
+
+        seqPRB = 1020
         for i, value in enumerate(edited_dataPRB):
             row_number = i // sheetPRB.max_column + 2  # Add 2 to skip the header row
             col_number = i % sheetPRB.max_column + 1
-            sheetPRB.cell(row=row_number, column=col_number).value = value
+            if col_number == 1:
+                 cellvalueP = str(part_number)
+            elif col_number == 2:
+                 cellvalueP = revision_number
+            elif col_number == 3:
+                cellvalueP = str(seqPRB) # Convert mtlSeqPRBss to an integer, add 10, and then convert back to a string
+                seqPRB = seqPRB + 10
+            elif col_number == 6:
+                 cellvalueP = '10'
+            elif col_number == 7:
+                 cellvalueP = 'Tool'
+            elif col_number == 8:
+                 cellvalueP = 'MFgSys'
+            elif col_number == 9:
+                 cellvalueP = 'mdieckman'
+            elif col_number == 10:
+                 cellvalueP = "JPMC"
+            else:
+                 cellvalueP = value
+            
+            sheetPRB.cell(row=row_number, column=col_number).value = cellvalueP
+
             
 
+        seqJB = 1020
         for i, value in enumerate(edited_dataJB):
             row_number = i // sheetJB.max_column + 2  # Add 2 to skip the header row
             col_number = i % sheetJB.max_column + 1
-            sheetJB.cell(row=row_number, column=col_number).value = value
+            if col_number == 2:
+                cellvalueJ = str(seqJB) # Convert mtlSeqPRBss to an integer, add 10, and then convert back to a string
+                seqJB = seqJB + 10
+            elif col_number == 5:
+                 cellvalueJ = 'Tool'
+            elif col_number == 6:
+                 cellvalueJ = '0'
+            elif col_number == 7:
+                 cellvalueJ = '10'
+            elif col_number == 8:
+                 cellvalueJ = 'MFgSys'
+            elif col_number == 9:
+                 cellvalueJ = 'JPMC'
+            elif col_number == 10:
+                 
+               cellvalueJ = str(getDescription(sheetJB.cell(row=row_number, column=3).value))[2:-3] 
+               
+            else:
+                cellvalueJ = value
+            sheetJB.cell(row=row_number, column=col_number).value = cellvalueJ
+
 
         # Save the changes back to the Excel file
         workbookPRB.save(workbook_pathPRB)
@@ -117,6 +160,5 @@ def success():
 if __name__ == '__main__':
     app.run(debug=True)
     # , host='phl-ws-0025', port=8050
-
 
 

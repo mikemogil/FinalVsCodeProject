@@ -2,17 +2,81 @@
 <html>
 <head>
     <title>Select Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        button[type="submit"]:active {
+            background-color: #3c9039;
+        }
+    </style>
 </head>
 <body>
-    <form method="post" action="/choosingfiles">
+    <form method="post" action="/submit-form">
+        <label for="part_number"><strong>Part Number:</strong> {{ part_number }}</label> 
+        <input type="hidden"  value="{{part_number}}" name="part_number" id="part_number" required>
+        <label for="revision_number"><strong>Part Number:</strong> {{ revision_number }}</label> 
+        <input type="hidden"  value="{{revision_number}}" name="revision_number" id="revision_number" required>
+        <input type="hidden"  value="{{dropdown_value}}" name="dropdown_value" id="dropdown_value" required>
+        <label type="hidden"  value="{{latest_file}}" name="latest_file" id="latest_file" required>
+
+
+
         <h2>Select Files</h2>
-        {% for file in files %}
+        {% for file in selected_files %}
         <label>
-            <input type="checkbox" name="selected_files" value="{{ file }}">{{ file }}
+            <input type="checkbox" name="selected_files" id="selected_files" value="{{ file }}"
+            {% if file == latest_file %} checked {% endif %}> {{ file }}
+
         </label>
-        <br>
         {% endfor %}
+        
         <button type="submit">Process Selected Files</button>
     </form>
+
+    
 </body>
 </html>

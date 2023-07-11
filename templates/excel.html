@@ -5,116 +5,274 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
     <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
     <style>
+        
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
+            width: 40;
         }
-
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        .form {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: #f4f4f4;
         }
-
-        .success-message {
-            font-size: 20px;
+       
+        #dataPRB,
+        #dataJB {
+        width: 80%; /* Adjust the width as desired */
+        }
+        h2 {
             text-align: center;
             margin-bottom: 20px;
         }
-            .styled-button {
-        padding: 10px 20px;
-        font-size: 16px;
-        font-weight: bold;
-        color: #fff;
-        background-color: #4CAF50;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
 
-    .styled-button:hover {
-        background-color: #45a049;
-    }
-
-    .styled-button:active {
-        background-color: #3c9039;
-    }
-    table {
-            width: 100%;
-            
+        label {
+            display: block;
+            margin-bottom: 10px;
         }
-    th, td {
-        padding: 8px;
-        border: 1px solid #ccc;
-        text-align: left;
-    }
-    th {
-        background-color: #f2f2f2;
-        font-weight: bold;
-    }
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        button[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        button[type="submit"]:active {
+            background-color: #3c9039;
+        }
+
+        #dataPRB {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #dataPRB td,
+        #dataPRB th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #dataPRB tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #dataPRB tr:hover {
+            background-color: #ddd;
+        }
+
+        .secondcontainer {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 50px;
+            height: 100%;
+            overflow: auto;
+            background-color: #f4f4f4;
+        }
+        #divinfo {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translate(-50%, 0);
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: #f4f4f4;
+        }
+        #dataJB,
+        #dataPRB {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #dataJB td,
+        #dataJB th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #dataJB tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #dataJB tr:hover {
+            background-color: #ddd;
+        }
+        #dataJB th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #424242;
+            color: white;
+        }   
+        #dataPRB th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #424242;
+            color: white;
+        }   
+        .styled-button {
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        
+        
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Form Submitted Successfully</h2>
-        <p><strong>Part Number:</strong> {{ part_number }}</p>
-        <p><strong>Revision Number:</strong> {{ revision_number }}</p>
-        <p><strong>Filepath:</strong> {{ dropdown }}</p>
-        <form method="POST">
-            <button class="styled-button" type="submit">Process</button>
-        </form>
-        <form method="post" action="/success">
-            <table id="data">
-                <thead>
-                    <tr>
-                        {% for header in headers %}
-                            <th>{{ header }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in data %}
-                        <tr>
-                            {% for cell in row %}
-                                <td contenteditable="true">{{ cell }}</td>
-                            {% endfor %}
-                        </tr>
+        <form method="post" action="/success" enctype="multipart/form-data">
+            <divInfo id = "divInfo">
+                <h2>Form Submitted Successfully</h2>
+                <label for="part_number"><strong>Part Number:</strong> {{ part_number }}</label> 
+                <input type="hidden"  value="{{part_number}}" name="part_number" id="part_number" required>
+                <label for="revision_number"><strong>revision_number:</strong> {{ revision_number }}</label> 
+                <input type="hidden"  value="{{revision_number}}" name="revision_number" id="revision_number" required> 
+                <input type="hidden"  value="{{selected_files}}" name="selected_files" id="selected_files" required>
+                <input type="hidden"  value="{{dropdown_value}}" name="dropdown_value" id="dropdown_value" required>
+                
+                <button class="styled-button" type="submit">Process</button>
+                <button type="button" onclick="insertRow('dataPRB')">Insert Row (PRB)</button>
+                <button type="button" onclick="insertRow('dataJB')">Insert Row (JB)</button>
+            </divInfo>
+        <secondContainer>
+        <table id="dataPRB">
+            <thead>
+                <tr>
+                    
+                    <th>Delete</th>
+                    {% for header in headersPRB %}
+                    <th>{{ header }}</th>
                     {% endfor %}
-                </tbody>
-            </table>
-            <br>
-            <button type="submit">Save Changes</button>
-            {% for row in data %}
-                {% for cell in row %}
-                    <input type="hidden" name="edited_data[]" value="{{ cell }}">
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in dataPRB %}
+                <tr>
+                    <td><button type="button" onclick="deleteRow(this)">Delete</button></td>
+                    {% for cell in row %}
+                    <td><input type="text" name="edited_dataPRB" value="{{ cell }}"></td>
+                    {% endfor %}
+                </tr>
                 {% endfor %}
-            {% endfor %}
-        </form>
+            </tbody>
+        </table>
+
+        <script>
+            function deleteRow(button) {
+                const row = button.parentNode.parentNode;
+                row.parentNode.removeChild(row);
+            }
         
+            function insertRow(tableId) {
+                const table = document.getElementById(tableId);
+                
+                const newRow = table.insertRow(table.rows.length);
+                const numColumns = table.rows[0].cells.length - 1;
+        
+                // Add the delete button at the beginning of the row
+                const deleteCell = newRow.insertCell(0);
+                const deleteButton = document.createElement('button');
+                deleteButton.type = 'button';
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', function() {
+                    deleteRow(this);
+                });
+                deleteCell.appendChild(deleteButton);
+        
+                for (let i = 0; i < numColumns; i++) {
+                    const cell = newRow.insertCell(i + 1); // Shifted by 1 to accommodate the delete button
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    if (tableId == 'dataPRB') {
+                        input.name = 'edited_dataPRB';
+                    } else if (tableId == 'dataJB') {
+                        input.name = 'edited_dataJB';
+                    }
+                    cell.appendChild(input);
+                }
+            }
+        </script>
+        
+        <!-- const deleteButton = document.createElement('button');
+                        const deleteCell = newRow.insertCell();
+
+                        deleteButton.type = 'button';
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.addEventListener('click', function() {
+                        deleteRow(this);
+                        });
+                        deleteCell.appendChild(deleteButton); -->
+        <table id="dataJB">
+            <thead>
+                <tr>
+                    <th>Delete</th>
+
+                    {% for header in headersJB %}
+                    <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in dataJB %}
+                <tr>
+                    <td><button type="button" onclick="deleteRow(this)">Delete</button></td>
+                    {% for cell in row %}
+                    <td><input type="text" name="edited_dataJB" value="{{ cell }}"></td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 // Add event listeners to the table cells for editing
-                const cells = document.querySelectorAll('#data td');
-        
+                const cells = document.querySelectorAll('#dataJB td');
+
                 cells.forEach(cell => {
                     cell.addEventListener('input', () => {
-                        cell.setAttribute('data-edited', 'true');
+                        cell.setAttribute('data-editedJB', 'true');
                     });
                 });
             });
         </script>
+            </secondContainer>
+
+        
+
+        </form>
     </div>
-    
 </body>
-</script>
 </html>
-
-
