@@ -5,8 +5,8 @@ import xml.etree.ElementTree as ET
 
 def get_latest_file_path(partnum, dropdown):
     parent_directory = r"X:\PROGRAMMING\CUSTOMER"
-    filePath = glob.glob(fr"{parent_directory}\**\*{partnum}*.tls", recursive=True)
-    
+    filePath = glob.glob(fr"{parent_directory}\{dropdown}\**\*{partnum}*.tls", recursive=True)
+    print(dropdown)
     if filePath:
         latest_file = max(filePath, key=os.path.getmtime)
         print(latest_file)

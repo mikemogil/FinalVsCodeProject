@@ -6,10 +6,8 @@ def ExcelFiles(partNumber, partNew, rowsJob, rowsPart,revnum, non_Existing_ID):
     revnum = revnum
     all_data = []
     jobscurrent = []
-    start_sequence_number = 1020
-    increment = 10
     startSeq = 1020
-    rowsPart = [(partNumber, part[0], part[1], part[2], "**", revnum)for i, part in enumerate(rowsPart)]
+    rowsPart = [(partNumber, part[0], part[1], part[2], "***", revnum)for i, part in enumerate(rowsPart)]
   
     
     
@@ -19,27 +17,29 @@ def ExcelFiles(partNumber, partNew, rowsJob, rowsPart,revnum, non_Existing_ID):
     else:
         all_data = rowsPart
 
-    print (rowsPart + updated_part_new)
     import openpyxl
     prb = openpyxl.Workbook()
     partRevBom = prb.active
     column_headers = ['PartNum', 'RevisionNum','MtlSeq', 'MtlPartNum', 'QtyPer', 'RelatedOperation', 'UOMCode', 'Plant', 'ECOGroupID', 'Company' ]
     partRevBom.append(column_headers)
     for row in all_data:
-        partRevBom.append([row[0], revnum, row[4], row[1], row[3], 10, 'Tool', 'MFgSys', 'mdieckman', 'JPMC'])
-    prb.save(f'PRB,{partNumber},{revnum}.xlsx')
+        partRevBom.append([row[0], revnum, startSeq, row[1], row[3], 10, 'Tool', 'MFgSys', 'mdieckman', 'JPMC'])
+        startSeq += 10
 
+    prb.save(fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{partNumber},{revnum}.xlsx')
     for eachJob in rowsJob:
-        
+        startSeq = 1020
         for job in all_data:
-            jobscurrent.append([eachJob['JobNum'], job[4], job[1], job[3],'Tool', 0, 10, 'MFgSys', 'JPMC', job[2]])
+            jobscurrent.append([eachJob['JobNum'], startSeq, job[1], job[3],'Tool', 0, 10, 'MFgSys', 'JPMC', job[2]])
+            startSeq += 10
+
     jbm = openpyxl.Workbook()
     jobBom = jbm.active
     column_headers = ['JobNum', 'MtlSeq','PartNum', 'QtyPer','IUM','AssemblySeq', 'RelatedOperation', 'Plant', 'Company', 'Description' ]
     jobBom.append(column_headers)
     for row in jobscurrent:
         jobBom.append(row)
-    jbm.save(f'JB,{partNumber},{revnum}.xlsx')    
+    jbm.save(fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{partNumber},{revnum}.xlsx')    
     return partNumber, revnum
 
 def pnrn():

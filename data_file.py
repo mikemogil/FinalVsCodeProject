@@ -80,20 +80,7 @@ def part(partNumber, revNum, idlist):
     existing_ids = [row[0] for row in rowsPart]
     non_existing_ids = [id for id in finalList if id not in existing_ids]
 
-    # nonexistentids = db.text("""
-    #     SELECT p2.PartDescription
-    #     FROM dbo.Part p
-    #     WHERE p.PartNum in :non_existing_ids
-    #     """
-    # )                    
-    # nonexistentids = nonexistentids.bindparams(non_existing_ids = non_existing_ids)
-    # nonExistingIDS = list(conn.execute(nonexistentids).fetchall())
-    
-    # print("Non-existing IDs:", non_existing_ids)
-    # print('\n\n')
-    # print("Existing IDs:", rowsPart)
-
-    # print("Current Jobs:", rowsJob)
+   
     partNew = ''
     if len(non_existing_ids) > 0:
         queryNew = db.text(("""
@@ -105,6 +92,9 @@ def part(partNumber, revNum, idlist):
         partNew = queryNew.bindparams(non_existing_ids = non_existing_ids)
         partNew = list(conn.execute(partNew).fetchall())
         print(partNew, "Ne parts")
+        validIds = [new[0] for new in partNew]
+        invalid = [id for id in non_existing_ids if id not in validIds]
+        print(invalid, "invalid")
     else:
         partNew = []
 

@@ -4,6 +4,9 @@ import json
 from data_file import part, getDescription
 import openpyxl
 from findfile import get_latest_file_path, id_list_from_file
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 directory_path = r"X:\PROGRAMMING\CUSTOMER"
 dropdown = [folder for folder in os.listdir(directory_path) if os.path.isdir(os.path.join(directory_path, folder))]
 
@@ -21,6 +24,7 @@ def form():
 def submit_form():
     if 'selected_files' in request.form:
         part_number = request.form.get('part_number')
+     
         selected_files = request.form.getlist('selected_files')
         # full_file_path = request.form.getlist('full_file_path')
         revision_number = request.form.get('revision_number')
@@ -31,6 +35,7 @@ def submit_form():
     else:
         
         part_number = request.form['partNumber']
+        part_number = part_number.replace(" ", "")
         revision_number = request.form['revisionNumber']
         dropdown_value = request.form['dropdown_value']
         filepaths = get_latest_file_path(part_number,dropdown_value)
@@ -53,8 +58,8 @@ def success():
         edited_dataPRB = request.form.getlist('edited_dataPRB')
         edited_dataJB = request.form.getlist('edited_dataJB')
         # part(part_number, revision_number, selected_files)
-        workbook_pathPRB = f'C:\FinalVsCodeProject\PRB,{part_number},{revision_number}.xlsx'
-        workbook_pathJB = f'C:\FinalVsCodeProject\JB,{part_number},{revision_number}.xlsx' 
+        workbook_pathPRB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\FinalVsCodeProject\PRB,{part_number},{revision_number}.xlsx'
+        workbook_pathJB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\FinalVsCodeProject\JB,{part_number},{revision_number}.xlsx' 
         
         workbookPRB = openpyxl.load_workbook(workbook_pathPRB)
         workbookJB = openpyxl.load_workbook(workbook_pathJB)
@@ -122,7 +127,9 @@ def success():
         workbookJB.save(workbook_pathJB)
 
         # Redirect to the success page
-        return 'An email Has been sent to Mark Dieckman.'
+        
+
+        return render_template('finished.html')
     else:
         # Get the initial data from the Excel sheet
 
@@ -135,8 +142,8 @@ def success():
         
         part(part_number, revision_number, selected_files)
 
-        workbook_pathPRB = f'C:\FinalVsCodeProject\PRB,{part_number},{revision_number}.xlsx'
-        workbook_pathJB = f'C:\FinalVsCodeProject\JB,{part_number},{revision_number}.xlsx' 
+        workbook_pathPRB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{part_number},{revision_number}.xlsx'
+        workbook_pathJB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{part_number},{revision_number}.xlsx' 
 
         workbookPRB = openpyxl.load_workbook(workbook_pathPRB)
         workbookJB = openpyxl.load_workbook(workbook_pathJB)

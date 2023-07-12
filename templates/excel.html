@@ -169,8 +169,8 @@
         <secondContainer>
         <table id="dataPRB">
             <thead>
-                <tr>
-                    
+                <tr>                    
+
                     <th>Delete</th>
                     {% for header in headersPRB %}
                     <th>{{ header }}</th>
@@ -178,7 +178,8 @@
                 </tr>
             </thead>
             <tbody>
-                {% for row in dataPRB %}
+                {% for row in dataPRB %} 
+                
                 <tr>
                     <td><button type="button" onclick="deleteRow(this)">Delete</button></td>
                     {% for cell in row %}
@@ -225,15 +226,7 @@
             }
         </script>
         
-        <!-- const deleteButton = document.createElement('button');
-                        const deleteCell = newRow.insertCell();
-
-                        deleteButton.type = 'button';
-                        deleteButton.textContent = 'Delete';
-                        deleteButton.addEventListener('click', function() {
-                        deleteRow(this);
-                        });
-                        deleteCell.appendChild(deleteButton); -->
+        
         <table id="dataJB">
             <thead>
                 <tr>
