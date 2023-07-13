@@ -74,9 +74,11 @@ def part(partNumber, revNum, idlist):
 
     rowsPart = list(conn.execute(queryPartNum).fetchall())
     rowsJob = list(conn.execute(queryJobNum).mappings().fetchall())
-    
-    print("Here is rows part:", rowsPart)
 
+    
+    
+        
+        
     existing_ids = [row[0] for row in rowsPart]
     non_existing_ids = [id for id in finalList if id not in existing_ids]
 
@@ -91,16 +93,15 @@ def part(partNumber, revNum, idlist):
         ))
         partNew = queryNew.bindparams(non_existing_ids = non_existing_ids)
         partNew = list(conn.execute(partNew).fetchall())
-        print(partNew, "Ne parts")
         validIds = [new[0] for new in partNew]
         invalid = [id for id in non_existing_ids if id not in validIds]
         print(invalid, "invalid")
     else:
         partNew = []
 
-    excelBuilder.ExcelFiles(partNumber, partNew, rowsJob, rowsPart,revNum, non_existing_ids)
+    dataLength = excelBuilder.ExcelFiles(partNumber, partNew, rowsJob, rowsPart,revNum, non_existing_ids)
       
-    return rowsJob, rowsPart, filepath, non_existing_ids
+    return rowsJob, rowsPart, filepath, non_existing_ids, dataLength[2]
             
 def getDescription(mtlPartNum):
     partDesc = db.text("""
@@ -113,12 +114,38 @@ def getDescription(mtlPartNum):
     description = conn.execute(partDesc).fetchone()
     if len(description) > 1:
         description = description[0]
-    # q: my description onlly return a single value, how do I get the value out of the tuple?
-    # q: how do I get the value out of the tuple?
-
+    
 
     return description
 
-    
+def getJobNum(partNumber, revNum):
+    queryJobNum = db.text("""
+        SELECT DISTINCT JobHead.JobNum
+        FROM EpicorLive11.Erp.JobHead JobHead, EpicorLive11.Erp.JobOpDtl JobOpDtl, EpicorLive11.Erp.JobOper JobOper, EpicorLive11.Erp.Resource Resource
+        WHERE JobOper.Company = JobHead.Company
+        AND JobHead.PartNum = :partNumber
+        And JobHead.RevisionNum = :revNum
+        AND JobOper.JobNum = JobHead.JobNum
+        AND JobOpDtl.AssemblySeq = JobOper.AssemblySeq
+        AND JobOpDtl.Company = JobHead.Company
+        AND JobOpDtl.Company = JobOper.Company
+        AND JobOpDtl.JobNum = JobHead.JobNum
+        AND JobOpDtl.JobNum = JobOper.JobNum 
+        AND JobOpDtl.OprSeq = JobOper.OprSeq
+        AND Resource.Company = JobHead.Company
+        AND Resource.Company = JobOpDtl.Company
+        AND Resource.Company = JobOper.Company
+        AND Resource.ResourceID = JobOpDtl.ResourceID
+        AND ((JobHead.Company='JPMC') AND (JobOper.OpComplete=0) AND (JobOper.OpCode In ('SWISS','CNC')))
+        ORDER BY JobHead.JobNum
+        """
+            )
+    queryJobNum = queryJobNum.bindparams(partNumber = partNumber, revNum = revNum)
+    rowsJob = list(conn.execute(queryJobNum).fetchall())
+    myjobs = []
+    for jobs in rowsJob:
+        print(jobs[0], "My jobs")
+        myjobs.append(jobs[0])
+    return myjobs
 
 

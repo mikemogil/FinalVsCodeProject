@@ -5,8 +5,9 @@ from data_file import part, getDescription
 import openpyxl
 from findfile import get_latest_file_path, id_list_from_file
 import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+from excelBuilder import secondexcelBuilder
+from data_file import getJobNum
+
 directory_path = r"X:\PROGRAMMING\CUSTOMER"
 dropdown = [folder for folder in os.listdir(directory_path) if os.path.isdir(os.path.join(directory_path, folder))]
 
@@ -44,7 +45,6 @@ def submit_form():
     
 
 
-
 @app.route('/success', methods=['GET', 'POST'])
 def success():
 
@@ -57,21 +57,22 @@ def success():
         revision_number = request.form.get('revision_number')
         edited_dataPRB = request.form.getlist('edited_dataPRB')
         edited_dataJB = request.form.getlist('edited_dataJB')
+        newPartNum = request.form.getlist('partNum')
+        newQtyPer = request.form.getlist('qtyPer')
+        dataLength = request.form.getlist('jobs')
+        jobs = getJobNum(part_number, revision_number)
+        for job in jobs:
+             print(job)
         # part(part_number, revision_number, selected_files)
-        workbook_pathPRB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\FinalVsCodeProject\PRB,{part_number},{revision_number}.xlsx'
-        workbook_pathJB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\FinalVsCodeProject\JB,{part_number},{revision_number}.xlsx' 
+        workbook_pathPRB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{part_number},{revision_number}.xlsx'
+        workbook_pathJB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{part_number},{revision_number}.xlsx' 
         
-        workbookPRB = openpyxl.load_workbook(workbook_pathPRB)
-        workbookJB = openpyxl.load_workbook(workbook_pathJB)
-        sheetPRB = workbookPRB.active
-        sheetJB = workbookJB.active
-        sheetPRB.delete_rows(2, sheetPRB.max_row)
-        sheetJB.delete_rows(2, sheetJB.max_row)
 
-        seqPRB = 1020
-        for i, value in enumerate(edited_dataPRB):
-            row_number = i // sheetPRB.max_column + 2  # Add 2 to skip the header row
-            col_number = i % sheetPRB.max_column + 1
+        secondBuilder = secondexcelBuilder(workbook_pathPRB, workbook_pathJB, edited_dataPRB, edited_dataJB, newPartNum, newQtyPer, jobs, part_number, revision_number, dataLength)
+        seqPRB  = 1020
+        for i, value in enumerate(secondBuilder[1]):
+            row_number = i // secondBuilder[2].max_column + 2  # Add 2 to skip the header row
+            col_number = i % secondBuilder[3].max_column + 1
             if col_number == 1:
                  cellvalueP = str(part_number)
             elif col_number == 2:
@@ -79,6 +80,10 @@ def success():
             elif col_number == 3:
                 cellvalueP = str(seqPRB) # Convert mtlSeqPRBss to an integer, add 10, and then convert back to a string
                 seqPRB = seqPRB + 10
+            elif col_number == 4:
+                 cellvalueP = value
+            elif col_number == 5:
+                 cellvalueP = value
             elif col_number == 6:
                  cellvalueP = '10'
             elif col_number == 7:
@@ -92,17 +97,17 @@ def success():
             else:
                  cellvalueP = value
             
-            sheetPRB.cell(row=row_number, column=col_number).value = cellvalueP
+            secondBuilder[2].cell(row=row_number, column=col_number).value = cellvalueP
 
             
 
         seqJB = 1020
-        for i, value in enumerate(edited_dataJB):
-            row_number = i // sheetJB.max_column + 2  # Add 2 to skip the header row
-            col_number = i % sheetJB.max_column + 1
+        for i, value in enumerate(secondBuilder[0]):
+            row_number = i // secondBuilder[3].max_column + 2  # Add 2 to skip the header row
+            col_number = i % secondBuilder[3].max_column + 1
             if col_number == 2:
                 cellvalueJ = str(seqJB) # Convert mtlSeqPRBss to an integer, add 10, and then convert back to a string
-                seqJB = seqJB + 10
+                seqJB = seqJB + 10 
             elif col_number == 5:
                  cellvalueJ = 'Tool'
             elif col_number == 6:
@@ -115,16 +120,16 @@ def success():
                  cellvalueJ = 'JPMC'
             elif col_number == 10:
                  
-               cellvalueJ = str(getDescription(sheetJB.cell(row=row_number, column=3).value))[2:-3] 
+               cellvalueJ = str(getDescription(secondBuilder[3].cell(row=row_number, column=3).value))[2:-3] 
+               print(cellvalueJ)
                
             else:
                 cellvalueJ = value
-            sheetJB.cell(row=row_number, column=col_number).value = cellvalueJ
-
+            secondBuilder[3].cell(row=row_number, column=col_number).value = cellvalueJ
 
         # Save the changes back to the Excel file
-        workbookPRB.save(workbook_pathPRB)
-        workbookJB.save(workbook_pathJB)
+        secondBuilder[4].save(workbook_pathPRB)
+        secondBuilder[5].save(workbook_pathJB)
 
         # Redirect to the success page
         
@@ -140,7 +145,7 @@ def success():
         
 
         
-        part(part_number, revision_number, selected_files)
+        partinfo = part(part_number, revision_number, selected_files)
 
         workbook_pathPRB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{part_number},{revision_number}.xlsx'
         workbook_pathJB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{part_number},{revision_number}.xlsx' 
@@ -154,7 +159,8 @@ def success():
         headersJB = [cell.value for cell in sheetJB[1]]
         dataPRB = []
         dataJB = []
-
+        
+            
         for rowPRB in sheetPRB.iter_rows(min_row=2, values_only=True):
             dataPRB.append(rowPRB)
 
@@ -162,10 +168,9 @@ def success():
                     dataJB.append(rowJB)
 
         return render_template('excel.html', part_number=part_number, revision_number=revision_number,
-                                headersPRB=headersPRB, dataPRB=dataPRB, dataJB = dataJB, headersJB = headersJB, selected_files = selected_files)
+                                headersPRB=headersPRB, dataPRB=dataPRB, dataJB = dataJB, headersJB = headersJB, selected_files = selected_files, jobs = partinfo[4])
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    # , host='phl-ws-0025', port=8050
+    app.run(debug=False, host='phl-ws-0025', port=8050)
 
 

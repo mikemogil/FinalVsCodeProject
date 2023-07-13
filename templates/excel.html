@@ -146,126 +146,168 @@
             cursor: pointer;
         }
         
-        
+        .top-right-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        #addButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .inputFields {
+            width: 300px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .inputFields label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .inputFields input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
 
     </style>
 </head>
 <body>
+    
     <div class="container">
+        
         <form method="post" action="/success" enctype="multipart/form-data">
-            <divInfo id = "divInfo">
+            <divInfo id="divInfo">
+                <div class="top-right-container">
+                    <button id="addButton" type="button">Add Parts</button>
+                    <div class="inputFields"></div>
+                </div>
                 <h2>Form Submitted Successfully</h2>
-                <label for="part_number"><strong>Part Number:</strong> {{ part_number }}</label> 
-                <input type="hidden"  value="{{part_number}}" name="part_number" id="part_number" required>
-                <label for="revision_number"><strong>revision_number:</strong> {{ revision_number }}</label> 
-                <input type="hidden"  value="{{revision_number}}" name="revision_number" id="revision_number" required> 
-                <input type="hidden"  value="{{selected_files}}" name="selected_files" id="selected_files" required>
-                <input type="hidden"  value="{{dropdown_value}}" name="dropdown_value" id="dropdown_value" required>
-                
+                <label for="part_number"><strong>Part Number:</strong> {{ part_number }}</label>
+                <input type="hidden" value="{{part_number}}" name="part_number" id="part_number" required>
+                <label for="revision_number"><strong>revision_number:</strong> {{ revision_number }}</label>
+                <input type="hidden" value="{{jobs}}" name="jobs" id="jobs" required>
+
+                <input type="hidden" value="{{revision_number}}" name="revision_number" id="revision_number" required>
+                <input type="hidden" value="{{selected_files}}" name="selected_files" id="selected_files" required>
+                <input type="hidden" value="{{dropdown_value}}" name="dropdown_value" id="dropdown_value" required>
+
                 <button class="styled-button" type="submit">Process</button>
-                <button type="button" onclick="insertRow('dataPRB')">Insert Row (PRB)</button>
-                <button type="button" onclick="insertRow('dataJB')">Insert Row (JB)</button>
             </divInfo>
-        <secondContainer>
-        <table id="dataPRB">
-            <thead>
-                <tr>                    
+            <secondContainer>
+                <table id="dataPRB">
+                    <thead>
+                    <tr>
 
-                    <th>Delete</th>
-                    {% for header in headersPRB %}
-                    <th>{{ header }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in dataPRB %} 
-                
-                <tr>
-                    <td><button type="button" onclick="deleteRow(this)">Delete</button></td>
-                    {% for cell in row %}
-                    <td><input type="text" name="edited_dataPRB" value="{{ cell }}"></td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                        <th>Delete</th>
+                        {% for header in headersPRB %}
+                        <th>{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in dataPRB %}
 
-        <script>
-            function deleteRow(button) {
-                const row = button.parentNode.parentNode;
-                row.parentNode.removeChild(row);
-            }
-        
-            function insertRow(tableId) {
-                const table = document.getElementById(tableId);
-                
-                const newRow = table.insertRow(table.rows.length);
-                const numColumns = table.rows[0].cells.length - 1;
-        
-                // Add the delete button at the beginning of the row
-                const deleteCell = newRow.insertCell(0);
-                const deleteButton = document.createElement('button');
-                deleteButton.type = 'button';
-                deleteButton.textContent = 'Delete';
-                deleteButton.addEventListener('click', function() {
-                    deleteRow(this);
-                });
-                deleteCell.appendChild(deleteButton);
-        
-                for (let i = 0; i < numColumns; i++) {
-                    const cell = newRow.insertCell(i + 1); // Shifted by 1 to accommodate the delete button
-                    const input = document.createElement('input');
-                    input.type = 'text';
-                    if (tableId == 'dataPRB') {
-                        input.name = 'edited_dataPRB';
-                    } else if (tableId == 'dataJB') {
-                        input.name = 'edited_dataJB';
+                    <tr>
+                        <td><button type="button" onclick="deleteRow(this)">Delete</button></td>
+                        {% for cell in row %}
+                        <td><input type="text" name="edited_dataPRB" value="{{ cell }}"></td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <script>
+                    function deleteRow(button) {
+                        const row = button.parentNode.parentNode;
+                        row.parentNode.removeChild(row);
                     }
-                    cell.appendChild(input);
-                }
-            }
-        </script>
-        
-        
-        <table id="dataJB">
-            <thead>
-                <tr>
-                    <th>Delete</th>
 
-                    {% for header in headersJB %}
-                    <th>{{ header }}</th>
+
+                </script>
+
+
+                <table id="dataJB">
+                    <thead>
+                    <tr>
+                        <th>Delete</th>
+
+                        {% for header in headersJB %}
+                        <th>{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in dataJB %}
+                    <tr>
+                        <td><button type="button" onclick="deleteRow(this)">Delete</button></td>
+                        {% for cell in row %}
+                        <td><input type="text" name="edited_dataJB" value="{{ cell }}"></td>
+                        {% endfor %}
+                    </tr>
                     {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in dataJB %}
-                <tr>
-                    <td><button type="button" onclick="deleteRow(this)">Delete</button></td>
-                    {% for cell in row %}
-                    <td><input type="text" name="edited_dataJB" value="{{ cell }}"></td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    </tbody>
+                </table>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                // Add event listeners to the table cells for editing
-                const cells = document.querySelectorAll('#dataJB td');
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        // Add event listeners to the table cells for editing
+                        const cells = document.querySelectorAll('#dataJB td');
 
-                cells.forEach(cell => {
-                    cell.addEventListener('input', () => {
-                        cell.setAttribute('data-editedJB', 'true');
+                        cells.forEach(cell => {
+                            cell.addEventListener('input', () => {
+                                cell.setAttribute('data-editedJB', 'true');
+                            });
+                        });
                     });
-                });
-            });
-        </script>
+                </script>
             </secondContainer>
-
-        
-
         </form>
     </div>
+
+    <script>
+        // JavaScript code for adding input fields
+        const addButton = document.getElementById('addButton');
+        const inputFieldsContainer = document.querySelector('.inputFields');
+    
+        addButton.addEventListener('click', () => {
+            const inputContainer = document.createElement('div');
+    
+            const partNumInput = document.createElement('input');
+            partNumInput.type = 'text';
+            partNumInput.name = 'partNum';
+            partNumInput.placeholder = 'PartNum';
+    
+            const qtyPerInput = document.createElement('input');
+            qtyPerInput.type = 'text';
+            qtyPerInput.name = 'qtyPer';
+            qtyPerInput.placeholder = 'QtyPer';
+    
+            inputContainer.appendChild(partNumInput);
+            inputContainer.appendChild(qtyPerInput);
+            inputFieldsContainer.appendChild(inputContainer);
+        });
+    </script>
+    
+    
 </body>
 </html>
