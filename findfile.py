@@ -15,13 +15,6 @@ def get_latest_file_path(partnum, dropdown):
         latest_file = 0
 
 
-    
-    # for files in filePath:
-        
-    #     base = os.path.basename(files)
-    #     allFiles.append(base)
-    # latest_file = os.path.basename(latest_file)
-    
     return filePath, latest_file
 # ***********************************************************************************************************************************  
 def id_list_from_file(files):

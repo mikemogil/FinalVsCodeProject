@@ -203,7 +203,10 @@
                 <h2>Form Submitted Successfully</h2>
                 <label for="part_number"><strong>Part Number:</strong> {{ part_number }}</label>
                 <input type="hidden" value="{{part_number}}" name="part_number" id="part_number" required>
-                <label for="revision_number"><strong>revision_number:</strong> {{ revision_number }}</label>
+                <label for="revision_number"><strong>revision_number:</strong> {{ revision_number }}</label> 
+                <input type="hidden" value="{{NewParts}}" name="NewParts" id="NewParts" required>
+                <input type="hidden" value="{{NewPartsDesc}}" name="NewPartsDesc" id="NewPartsDesc" required>
+
                 <input type="hidden" value="{{jobs}}" name="jobs" id="jobs" required>
 
                 <input type="hidden" value="{{revision_number}}" name="revision_number" id="revision_number" required>

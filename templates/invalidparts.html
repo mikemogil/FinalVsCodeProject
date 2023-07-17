@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Your HTML Document</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+
+    form {
+      background-color: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    button[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    input[type="text"][data-highlight="true"] {
+      color: red;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Invalid IDs</h1>
+  <form action="/invalidP" method="POST">
+        <input type="hidden"  value="{{part_number}}" name="part_number" id="part_number" required>
+        <input type="hidden"  value="{{revision_number}}" name="revision_number" id="revision_number" required>
+        <input type="hidden"  value="{{dropdown_value}}" name="dropdown_value" id="dropdown_value" required>
+        <input type="hidden"  value="{{all_ids}}" name="all_ids" id="all_ids" required>
+
+    {% for item in invalIDs %}
+      <label>
+        <input type="checkbox" name="checkedValues" value="{{ item }}" readonly>
+        <input type="text" name="invalID_values" placeholder="{{ item }}" value="{{item}}" oninput="updateCheckboxValue(this)" {% if '(SGS)' in item %}data-highlight="true"{% endif %}>
+    </input>
+      </label>
+      <br>
+    {% endfor %}
+    
+    <button type="submit" name="skip">Skip</button>
+    <button type="submit" name="process">Process</button>
+    <script>
+      function updateCheckboxValue(input) {
+          var checkbox = document.getElementsByName("checkedValues")[0];
+          checkbox.value = input.value;
+      }
+      </script>
+  </form>
+</body>
+</html>

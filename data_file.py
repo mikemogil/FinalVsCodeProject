@@ -31,11 +31,10 @@ conn = engine.connect()
 #     return fileslist
 
 
-def part(partNumber, revNum, idlist):
+def part(partNumber, revNum, idlist, newpartsCreated, NewPArtDscriptions):
     revNum = revNum
     finalList = [item for item in idlist]
         # Execute the query
-    print("Here is idlist:", idlist)
     queryPartNum = db.text("""
         SELECT p2.PartNum, p2.PartDescription, pm.QtyPer
         FROM dbo.Part p
@@ -74,8 +73,8 @@ def part(partNumber, revNum, idlist):
 
     rowsPart = list(conn.execute(queryPartNum).fetchall())
     rowsJob = list(conn.execute(queryJobNum).mappings().fetchall())
-
-    
+    for i, partN in enumerate(newpartsCreated):
+        rowsPart.append([partN, NewPArtDscriptions[i], 0.01])
     
         
         
@@ -97,11 +96,12 @@ def part(partNumber, revNum, idlist):
         invalid = [id for id in non_existing_ids if id not in validIds]
         print(invalid, "invalid")
     else:
+        invalid = []
         partNew = []
 
     dataLength = excelBuilder.ExcelFiles(partNumber, partNew, rowsJob, rowsPart,revNum, non_existing_ids)
       
-    return rowsJob, rowsPart, filepath, non_existing_ids, dataLength[2]
+    return rowsJob, rowsPart, filepath, non_existing_ids, dataLength[2], invalid
             
 def getDescription(mtlPartNum):
     partDesc = db.text("""
@@ -111,11 +111,9 @@ def getDescription(mtlPartNum):
         """
     )
     partDesc = partDesc.bindparams(mtlPartNum = mtlPartNum)
-    description = conn.execute(partDesc).fetchone()
+    description = list(conn.execute(partDesc).fetchall())
     if len(description) > 1:
         description = description[0]
-    
-
     return description
 
 def getJobNum(partNumber, revNum):
@@ -144,8 +142,22 @@ def getJobNum(partNumber, revNum):
     rowsJob = list(conn.execute(queryJobNum).fetchall())
     myjobs = []
     for jobs in rowsJob:
-        print(jobs[0], "My jobs")
         myjobs.append(jobs[0])
     return myjobs
+
+def getInvalids(parts):
+    partlist = [item for item in parts]
+    availParts = db.text("""
+        SELECT p.PartNum
+        FROM dbo.Part p
+        WHERE p.PartNum IN :partlist
+        """
+    )
+    availParts = availParts.bindparams(partlist = partlist)
+    invalids = list(conn.execute(availParts).fetchall())
+    invalidparts = [id[0] for id in invalids]
+    invalidIDs= [id for id in partlist if id not in invalidparts]
+    print(invalidIDs, "invalid")
+    return invalidIDs
 
 
