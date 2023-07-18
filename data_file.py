@@ -114,6 +114,8 @@ def getDescription(mtlPartNum):
     description = list(conn.execute(partDesc).fetchall())
     if len(description) > 1:
         description = description[0]
+    else:
+        description = ''
     return description
 
 def getJobNum(partNumber, revNum):

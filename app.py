@@ -202,7 +202,16 @@ def success():
             elif col_number == 9:
                 cellvalueJ = 'JPMC'
             elif col_number == 10:
-                cellvalueJ = str(getDescription(secondBuilder[3].cell(row=row_number, column=3).value))[2:-3]
+                ex = getDescription(secondBuilder[3].cell(row=row_number, column=3).value)[2:-3]
+                print(ex, "temportary")
+                if ex == '':
+                    print("true")
+                    cellvalueJ = value
+                else:
+                    cellvalueJ = str(getDescription(secondBuilder[3].cell(row=row_number, column=3).value))[2:-3]
+
+                
+                
             else:
                 cellvalueJ = value
             secondBuilder[3].cell(row=row_number, column=col_number).value = cellvalueJ
