@@ -13,7 +13,7 @@ from inspect import getmembers, isclass,isfunction
 #Getting the correct filepath
 files = glob.glob(r"X:\PROGRAMMING\CUSTOMER\CROSSROADS\MPJ Plate\260224-5V10D18_REVC\Current\*")
 parent_directory = "X:\PROGRAMMING\CUSTOMER"
-partnum = '325-09103505-03'
+partnum = '270310'
 filePath = glob.glob(fr"{parent_directory}\**\*{partnum}*.tls", recursive=True)
 
 if filePath:

@@ -1,0 +1,129 @@
+/*! © 2023 Yahoo Holdings, Inc. For license information, see js/gpt_sandbox_76b92946cf691ae00f85.bundle.js.LICENSE.txt. */
+(()=>{var e={p:""};(()=>{
+if(!window.ymailAssetHost)throw new Error("window.ymailAssetHost must be set before running this application.")
+;e.p=window.ymailAssetHost})(),(()=>{"use strict";function e(){
+return(e=Object.assign||function(e){for(var i=1;i<arguments.length;i++){
+var d=arguments[i]
+;for(var t in d)Object.prototype.hasOwnProperty.call(d,t)&&(e[t]=d[t])}return e
+}).apply(this,arguments)}function i(e,i,d){if(void 0===d&&(d={}),!e){
+var t=new Error(i)
+;throw t.name="Invariant",!d||0===Object.keys(d).length||(t.data=d),t}return e}
+var d,t,n,a,o,s;!function(e){e.APP="APP",e.IFRAME="IFRAME"
+}(d||(d={})),function(e){e.REQ="REQ",e.RES="RES"}(t||(t={})),function(e){
+e.REFRESH="refresh",e.LOADED="loaded",e.INIT_ERROR="initError",e.NUKE="nuke"
+}(n||(n={})),function(e){e.MAIL="mail",e.BASIC_MAIL="basicMail",e.LOGIN="login",
+e.AOL_MAIL="aolMail"}(a||(a={})),function(e){
+e.CLIENT="client",e.VERSION="version",
+e.LIMITED="limited",e.HEADER_BIDDER="headerBidder",e.YMREQID="ymreqid"
+}(o||(o={})),function(e){e.CONFIG="config"}(s||(s={}));var r;!function(e){
+e.SLOT_RENDER_ENDED="slotRenderEnded",
+e.SLOT_REQUESTED="slotRequested",e.SLOT_RESPONSE_RECEIVED="slotResponseReceived"
+}(r||(r={}));var l;!function(e){
+e.LREC="LREC",e.MON="MON",e.SKY="SKY",e.FULL_PANE="FULL_PANE",
+e.FULL_SCREEN="FULL_SCREEN"}(l||(l={}))
+;l.LREC,l.MON,l.SKY,l.FULL_PANE,l.FULL_SCREEN;var c={pageLang:"lang",
+lang:"lang",partner:"cobrand",bucket:"bucket",spaceId:"spaceid",
+adLocation:"loc",adBlocker:"abk",AXId:"axid",gamTestId:"gamtestid",
+refreshIndex:"ri"},g={[a.MAIL]:"8YHB7Y738",[a.BASIC_MAIL]:"8YHB7Y738",
+[a.AOL_MAIL]:"8YHB8EU59",[a.LOGIN]:"8YHBS13WH"
+},w="mail",v=1e3,u=10.1,m="",E="",p="hb.yahoo.net",R="desktop",h=/^(https:\/\/([a-z0-9-]+[.])*(mail|login)\.(aol|yahoo)\.com)$/,f=/^(https:\/\/(?:norrin\.)?(alpha-)?gpt\.mail\.(aol|yahoo)\.net)$/
+;const I=class{constructor(e){
+var t=e.mode,n=e.appName,a=e.targetOrigin,o=e.iframeRef
+;this.messageId=0,this.listener=null,
+t&&Object.keys(d).map((e=>d[e])).includes(t)||i(!1,"Valid 'mode' needs to be specified"),
+a||i(!1,"Valid 'targetOrigin' needs to be specified"),
+t!==d.APP||o||i(!1,"Valid 'iframeRef' needs to be specified"),
+this.mode=t,this.targetOrigin=a,this.iframeRef=o,this.appName=n||"MAIL_APP"}
+sendMessage(e){var i,t
+;if(e.requestId=++this.messageId,this.mode===d.APP)null==(i=this.iframeRef)||null==(t=i.contentWindow)||t.postMessage(e,this.targetOrigin);else if(this.mode===d.IFRAME){
+var n;null==(n=window.parent)||n.postMessage(e,this.targetOrigin)}}
+sendRequestMessage(e,i){void 0===i&&(i={}),this.sendMessage({app:this.appName,
+type:t.REQ,name:e,data:i})}isReceivedMessageValid(e){var i,t=this.mode
+;return!!Object.keys(d).map((e=>d[e])).includes(t)&&(!!(t!==d.APP||f.test(e.origin)&&e.source===(null==(i=this.iframeRef)?void 0:i.contentWindow))&&!!(t!==d.IFRAME||h.test(e.origin)&&e.source===window.parent))
+}attachListener(e){var i=i=>{this.isReceivedMessageValid(i)&&e(i)}
+;this.listener&&(window.removeEventListener("message",this.listener),
+this.listener=null),window.addEventListener("message",i),this.listener=i}
+detachListener(){
+this.listener&&(window.removeEventListener("message",this.listener),
+this.listener=null)}};function y(e,i){
+var d,t=document.createElement("script"),n=document.getElementsByTagName("script")[0]
+;(t.type="text/javascript",
+t.async=!0,t.src=e,t.id=i,n)&&(null==(d=n.parentNode)||d.insertBefore(t,n))}
+function x(e,i,d,t,n){
+void 0===d&&(d="none"),window.advBidxc=window.advBidxc||{},
+window.advBidxc.execute=window.advBidxc.execute||[],
+window.advBidxc.execute.push((function(){var a,o
+;null!=(a=window)&&null!=(o=a.advBidxc)&&o.setCustomKeyValues&&window.advBidxc.setCustomKeyValues({
+k1:{key:"publisherblob",value:e},k2:{key:"bucket",value:i},k3:{key:"cobrand",
+value:d},k4:{key:"lang",value:t},k5:{key:"loc",value:n}})}))}
+var L=["slot","yieldGroupIds"],b=e=>{var i=window._GPTMessageClient,d={
+serviceName:e.serviceName};i.sendRequestMessage(r.SLOT_REQUESTED,d)},B=i=>{
+var d=window._GPTMessageClient;if(d){i.slot,i.yieldGroupIds
+;var t=e({},function(e,i){if(null==e)return{};var d,t,n={},a=Object.keys(e)
+;for(t=0;t<a.length;t++)d=a[t],i.indexOf(d)>=0||(n[d]=e[d]);return n}(i,L))
+;d.sendRequestMessage(r.SLOT_RENDER_ENDED,t)}},S=e=>{
+var i=window._GPTMessageClient,d={serviceName:e.serviceName}
+;i.sendRequestMessage(r.SLOT_RESPONSE_RECEIVED,d)},O=e=>{var i
+;for(i in e)void 0!==e[i]&&window.googletag.pubads().setTargeting(c[i],e[i])
+},A=(e,i)=>{var d;if(i)for(d in e)void 0!==e[d]&&i.setTargeting(c[d],e[d])
+},M=e=>{new I({mode:d.IFRAME,targetOrigin:"*"
+}).sendRequestMessage(n.INIT_ERROR,e)};(()=>{var i,t,o,s,l
+;window.googletag=window.googletag||{cmd:[]}
+;var c=(null==(i=window.location.hash)?void 0:i.substring(1))||"",h=(e=>{
+var i={};if(e)for(var d=e.substring(1).split("&"),t=0;t<d.length;t++){
+var n=d[t].split("=");i[decodeURIComponent(n[0])]=decodeURIComponent(n[1]||"")}
+return i})(window.location.search),f=h.ymreqid,L=h.client,N=1,_={};if(!c){
+var P="Config hash is empty";throw M({error:P,ymreqid:f}),new Error(P)}try{
+if(c.indexOf("=")>-1){var T=c.split("=")[1]||"{}"
+;_=JSON.parse(decodeURIComponent(T))}else _=JSON.parse(decodeURIComponent(c))
+}catch(ce){throw M({error:"Failed to parse config",ymreqid:f}),ce}
+var C=_,D=C.adUnitPath,k=C.size,U=C.div,q=void 0===U?"gpt-passback":U,F=C.pageUrl,H=C.npa,j=void 0!==H&&H,V=C.targetingConfig,G=C.PPId,Y=C.headerBidderConfig,K=(null==(t=_)?void 0:t.limited)||(null==(o=_)?void 0:o.limitedAds)||!1,Q=(null==(s=_)?void 0:s.headerBidder)||(null==(l=_)?void 0:l.headerBidderEnabled)||!1
+;if(Q&&Y){
+var W=Y.pblob,z=Y.buckets,J=Y.adLocation,$=Y.host,X=Y.cobrand,Z=Y.site,ee=void 0===Z?w:Z,ie=Y.region,de=void 0===ie?"us":ie,te=Y.lang,ne=void 0===te?"en-US":te
+;!function(e,i){
+var d=v,t=u,n=m,o=E,s=p,r=R,l=i||{},c=l.limitedAds,w=l.region,h=l.lang,f=l.site,I=l.client
+;window.advBidxc=window.advBidxc||{},
+window.advBidxc.execute=window.advBidxc.execute||[],
+window.advBidxc.timeout=d,window.advBidxc.customerId=g[I]||g[a.MAIL],
+window.advBidxc.domain=e,
+window.advBidxc.version=t,window.advBidxc.startTime=(new Date).getTime(),
+window.advBidxc.mchnm=n,
+window.advBidxc.ysec=o,window.advBidxc.limitedAds=c,window.advBidxc.yr=w,
+window.advBidxc.ylang=h,
+window.advBidxc.ys=f,window.advBidxc.ydt=r,window.advBidxc.loadGPT=window.setTimeout((function(){
+window.advBidxc&&!window.advBidxc.isAdServerLoaded&&(y(window.advBidxc.limitedAds?"https://pagead2.googlesyndication.com/tag/js/gpt.js":"https://securepubads.g.doubleclick.net/tag/js/gpt.js","gpt-script"),
+window.advBidxc.isAdServerLoaded=!0)
+}),window.advBidxc.timeout),y("https://"+s+"/bidexchange.js?cid="+window.advBidxc.customerId+"&version="+window.advBidxc.version+"&dn="+encodeURIComponent(window.advBidxc.domain)+"&yr="+encodeURIComponent(window.advBidxc.yr)+"&ylang="+encodeURIComponent(window.advBidxc.ylang)+"&ys="+encodeURIComponent(window.advBidxc.ys)+"&ydt="+encodeURIComponent(window.advBidxc.ydt)+"&ysec="+window.advBidxc.ysec,"mnet-script")
+}($,{
+limitedAds:(null==Y?void 0:Y.limited)||(null==Y?void 0:Y.limitDataProcessing)||!1,
+site:ee,region:de,lang:ne,client:L}),x(W,z,X,ne,J)}var ae=function(e){
+var i=0,d=0;return e.forEach((e=>{i=Math.max(e[0],i),d=Math.max(e[1],d)})),{
+maxWidth:i,maxHeight:d}
+}(k),oe=ae.maxWidth,se=ae.maxHeight,re=document.getElementById(q)
+;re&&oe&&se&&re.setAttribute("style","width:"+oe+"px;height:"+se+"px")
+;var le=new I({mode:d.IFRAME,targetOrigin:F});le.sendRequestMessage(n.LOADED,{
+ymreqid:f}),window._GPTMessageClient=le,window.googletag.cmd.push((()=>{
+var i=window.googletag,d=i.defineSlot(D,k,q)
+;d?(window.googletag.pubads().addEventListener(r.SLOT_RENDER_ENDED,B),
+window.googletag.pubads().addEventListener(r.SLOT_REQUESTED,b),
+window.googletag.pubads().addEventListener(r.SLOT_RESPONSE_RECEIVED,S),
+le.attachListener((t=>{if(t.data.name===n.REFRESH){
+var a=t.data.data,o=a.redefineSlot,s=a.config,r=a.redefineTargeting,l=a.targetingConfig
+;if(r&&l){if(Q&&Y)x(Y.pblob,Y.buckets,Y.cobrand,Y.lang,Y.adLocation);O(l)}if(o){
+var c=s,g=c.adUnitPath,w=c.size,v=c.div;googletag.destroySlots(),N=1
+;var u=i.defineSlot(g,w,v)
+;if(!u)return void le.sendRequestMessage(n.INIT_ERROR,{
+error:"ROTATE: Error redefining ad slot",ymreqid:f})
+;u.addService(i.pubads()),A(e({},l,{refreshIndex:N.toString()}),u),i.display(v)
+}else A({refreshIndex:(++N).toString()},d),window.googletag.pubads().refresh()}
+t.data.name===n.NUKE&&googletag.destroySlots()
+})),d.addService(i.pubads()),i.enableServices(),
+i.pubadsReady?(V&&(O(V),A(e({},V,{refreshIndex:N.toString()
+}),d)),i.pubads().set("page_url",F),
+i.pubads().setForceSafeFrame(!0),G&&i.pubads().setPublisherProvidedId(G),
+j?i.pubads().setPrivacySettings({nonPersonalizedAds:!0
+}):K&&i.pubads().setPrivacySettings({limitedAds:!0,restrictDataProcessing:!0
+}),i.display(q)):le.sendRequestMessage(n.INIT_ERROR,{
+error:"PubAdsService failed to load",ymreqid:f
+})):le.sendRequestMessage(n.INIT_ERROR,{error:"Error defining ad slot",ymreqid:f
+})}))})()})()})();

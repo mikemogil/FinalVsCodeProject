@@ -32,7 +32,7 @@ conn = engine.connect()
 
 
 def part(partNumber, revNum, idlist, newpartsCreated, NewPArtDscriptions):
-    revNum = revNum
+    revNum = str(revNum)
     finalList = [item for item in idlist]
         # Execute the query
     queryPartNum = db.text("""
@@ -75,10 +75,11 @@ def part(partNumber, revNum, idlist, newpartsCreated, NewPArtDscriptions):
     rowsJob = list(conn.execute(queryJobNum).mappings().fetchall())
     for i, partN in enumerate(newpartsCreated):
         rowsPart.append([partN, NewPArtDscriptions[i], 0.01])
-    
+
         
         
     existing_ids = [row[0] for row in rowsPart]
+    
     non_existing_ids = [id for id in finalList if id not in existing_ids]
 
    
@@ -94,14 +95,13 @@ def part(partNumber, revNum, idlist, newpartsCreated, NewPArtDscriptions):
         partNew = list(conn.execute(partNew).fetchall())
         validIds = [new[0] for new in partNew]
         invalid = [id for id in non_existing_ids if id not in validIds]
-        print(invalid, "invalid")
     else:
         invalid = []
         partNew = []
 
-    dataLength = excelBuilder.ExcelFiles(partNumber, partNew, rowsJob, rowsPart,revNum, non_existing_ids)
+    dataLength = excelBuilder.ExcelFiles(partNumber, partNew, rowsJob, rowsPart ,revNum, non_existing_ids)
       
-    return rowsJob, rowsPart, filepath, non_existing_ids, dataLength[2], invalid
+    return rowsJob, rowsPart, filepath, non_existing_ids, dataLength[2], invalid, dataLength[3]
             
 def getDescription(mtlPartNum):
     partDesc = db.text("""
@@ -112,7 +112,7 @@ def getDescription(mtlPartNum):
     )
     partDesc = partDesc.bindparams(mtlPartNum = mtlPartNum)
     description = list(conn.execute(partDesc).fetchall())
-    if len(description) > 1:
+    if len(description) > 0:
         description = description[0]
     else:
         description = ''
@@ -159,7 +159,6 @@ def getInvalids(parts):
     invalids = list(conn.execute(availParts).fetchall())
     invalidparts = [id[0] for id in invalids]
     invalidIDs= [id for id in partlist if id not in invalidparts]
-    print(invalidIDs, "invalid")
     return invalidIDs
 
 

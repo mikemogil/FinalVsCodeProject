@@ -5,9 +5,14 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-image: URL("/static/1687183075907.jpg"); /* Background photo URL */
+      background-size: cover; /* Optional: Adjust the size of the background photo */
+      background-attachment: fixed;
+
     }
 
     table {
+      background-color: #ddd;
       width: 100%;
       border-collapse: collapse;
     }
@@ -86,8 +91,8 @@
         <th title="Shank diameter UOM">ToolShank_c</th>
         <th title="Material">ToolMtl_c</th>
         <th title="Coating">ToolCoat_c</th>
-        <th title="Enter 0 or 1">ToolCoolant_c</th>
-        <th title="Comment">ToolNotes_c</th>
+        <th title="Coolant through? 'If applicable' Enter 0 or 1">ToolCoolant_c</th>
+        <th title="Comment. Could be additional specs, substitue p/n, quote number ect">ToolNotes_c</th>
 
         <th title="If the tool is not rev-controlled enter a hyphen as the rev">RevisionNum</th>
         <th title="Brief description of the rev">RevShortDesc</th>
@@ -96,7 +101,7 @@
 
         <th>Approved</th>
         <th>EffectiveDate</th>
-        <th title="Tooltip for PartAudit#ChangeDescription">PartAudit#ChangeDescription</th>
+        <th>PartAudit#ChangeDescription</th>
         <th title="Determines reorder point">MinimumQty</th>
         <th title="With MinimumQty Determines reorder qty">MaximumQty</th>
         <th title="Smallest qty the vendor will allow us to purchase">MinOrderQty</th>

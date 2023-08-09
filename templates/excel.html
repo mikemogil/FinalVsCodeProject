@@ -8,10 +8,13 @@
         
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-image: URL("/static/1687183075907.jpg"); /* Background photo URL */
+            background-size: cover; /* Optional: Adjust the size of the background photo */
+            background-attachment: fixed;
             margin: 0;
             padding: 20px;
             width: 40;
+            
         }
         .form {
             position: fixed;
@@ -20,9 +23,10 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: #f4f4f4;
         }
-       
+        table {
+            background-color: #f2f2f2;
+        }
         #dataPRB,
         #dataJB {
         width: 80%; /* Adjust the width as desired */
@@ -206,6 +210,7 @@
                 <label for="revision_number"><strong>revision_number:</strong> {{ revision_number }}</label> 
                 <input type="hidden" value="{{NewParts}}" name="NewParts" id="NewParts" required>
                 <input type="hidden" value="{{NewPartsDesc}}" name="NewPartsDesc" id="NewPartsDesc" required>
+                <input type="hidden" value="{{checked_values}}" name="checked_values" id="checked_values" required>
 
                 <input type="hidden" value="{{jobs}}" name="jobs" id="jobs" required>
 
@@ -220,7 +225,6 @@
                     <thead>
                     <tr>
 
-                        <th>Delete</th>
                         {% for header in headersPRB %}
                         <th>{{ header }}</th>
                         {% endfor %}
@@ -230,7 +234,6 @@
                     {% for row in dataPRB %}
 
                     <tr>
-                        <td><button type="button" onclick="deleteRow(this)">Delete</button></td>
                         {% for cell in row %}
                         <td><input type="text" name="edited_dataPRB" value="{{ cell }}"></td>
                         {% endfor %}
@@ -239,20 +242,12 @@
                     </tbody>
                 </table>
 
-                <script>
-                    function deleteRow(button) {
-                        const row = button.parentNode.parentNode;
-                        row.parentNode.removeChild(row);
-                    }
-
-
-                </script>
+                
 
 
                 <table id="dataJB">
                     <thead>
                     <tr>
-                        <th>Delete</th>
 
                         {% for header in headersJB %}
                         <th>{{ header }}</th>
@@ -262,7 +257,6 @@
                     <tbody>
                     {% for row in dataJB %}
                     <tr>
-                        <td><button type="button" onclick="deleteRow(this)">Delete</button></td>
                         {% for cell in row %}
                         <td><input type="text" name="edited_dataJB" value="{{ cell }}"></td>
                         {% endfor %}
