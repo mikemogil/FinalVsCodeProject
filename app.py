@@ -24,6 +24,7 @@ def form():
 
 @app.route('/submit-form', methods=['POST'])
 def submit_form():
+
     if 'selected_files' in request.form:
         part_number = request.form.get('part_number')
         selected_files = request.form.getlist('selected_files')
@@ -46,9 +47,59 @@ def submit_form():
 
 
 
+
 # **************************************************************************************************************************************************************************************
+@app.route('/create-part', methods=['POST'])
+def create_part():
+    return render_template('makeNewPart2.html')
 
 
+@app.route('/process-part', methods=['POST'])
+def process_part():
+    partNumber = request.form.getlist('PartNumber')
+    part_descriptions = request.form.getlist('PartDescription')
+    class_ids = request.form.getlist('ClassID')
+    unit_prices = request.form.getlist('UnitPrice')
+    RcvInspectionReq = request.form.getlist('RcvInspectionReq')
+    tool_edges = request.form.getlist('ToolEdges2_C')
+    tool_cats = request.form.getlist('ToolCat_c')
+    tool_Notes_c = request.form.getlist('Tool_Notes_c')
+    tool_subcats = request.form.getlist('ToolSubCat_c')
+    tool_mfgs = request.form.getlist('ToolMfg_c')
+    tdims = request.form.getlist('TDim_c')
+    tooldims = request.form.getlist('ToolDim_c')
+    trads = request.form.getlist('TRad_c')
+    toolrads = request.form.getlist('ToolRad_c')
+    tool_angs = request.form.getlist('ToolAng_c')
+    tool_flutes = request.form.getlist('ToolFlute_c')
+    tflute_lens = request.form.getlist('TFluteLen_c')
+    tool_flute_lens = request.form.getlist('ToolFluteLen_c')
+    treaches = request.form.getlist('TReach_c')
+    tool_reaches = request.form.getlist('ToolReach_c')
+    tshanks = request.form.getlist('TShank_c')
+    tool_shanks = request.form.getlist('ToolShank_c')
+    tool_mtls = request.form.getlist('ToolMtl_c')
+    tool_coats = request.form.getlist('ToolCoat_c')
+    tool_coolants = request.form.getlist('ToolCoolant_c')
+    revision_nums = request.form.getlist('RevisionNum')
+    rev_short_descs = request.form.getlist('RevShortDesc')
+    rev_descs = request.form.getlist('RevDescription')
+    drawNum = request.form.getlist('DrawNum')
+    approved = request.form.getlist('Approved')
+    effective_dates = request.form.getlist('EffectiveDate')
+    part_audit_descs = request.form.getlist('PartAudit#ChangeDescription')
+    min_qtys = request.form.getlist('MinimumQty')
+    max_qtys = request.form.getlist('MaximumQty')
+    min_order_qtys = request.form.getlist('MinOrderQty')
+    lead_times = request.form.getlist('LeadTime')
+    vendor_nums = request.form.getlist('VendorNum')
+    print(part_descriptions)
+    NewlyCreatedParts = NewPart(partNumber, part_descriptions, class_ids, unit_prices, RcvInspectionReq, tool_edges, tool_cats, tool_subcats, tool_mfgs, tdims, tooldims, trads, toolrads, tool_angs, tool_flutes, tflute_lens, tool_flute_lens, treaches, tool_reaches, tshanks, tool_shanks, tool_mtls, tool_coats, tool_coolants, tool_Notes_c, revision_nums, rev_short_descs, rev_descs,drawNum, approved, effective_dates, part_audit_descs, min_qtys, max_qtys, min_order_qtys, lead_times, vendor_nums)
+    bob = NewlyCreatedParts[0]
+    print(bob)
+    
+    return render_template('finished.html')
+# **************************************************************************************************************************************************************************************
 @app.route('/invalidP', methods=['GET', 'POST'])
 def invalidP():
      

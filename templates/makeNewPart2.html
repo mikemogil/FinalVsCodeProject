@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dynamic Rows with Input Fields</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: URL("/static/1687183075907.jpg"); /* Background photo URL */
+      background-size: cover; /* Optional: Adjust the size of the background photo */
+      background-attachment: fixed;
+
+    }
+
+    table {
+      background-color: #ddd;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  .add-row-button {
+    background-color: #007BFF; /* Blue background */
+    border: none; /* Remove border */
+    color: white; /* White text */
+    padding: 8px 12px; /* Smaller padding */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Inline block */
+    font-size: 14px; /* Smaller font size */
+    margin: 2px 1px; /* Some margin */
+    cursor: pointer; /* Mouse pointer on hover */
+    border-radius: 4px; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.add-row-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+  </style>
+  <script>
+    function addRow() {
+  var table = document.getElementById('dynamicTable'); // Make sure to replace this with your table's ID
+  var lastRow = table.rows[table.rows.length - 1];
+  var newRow = lastRow.cloneNode(true);
+  
+  // Clear input values in the cloned row if needed
+  var inputs = newRow.querySelectorAll('input, select');
+  inputs.forEach(function(input) {
+    if (input.type === 'text') {
+      input.value = '';
+    }
+  });
+  
+  table.appendChild(newRow);
+}
+
+  </script>
+</head>
+<body>
+    <button class="add-row-button" onclick="addRow()">Add Row</button>
+    <form action="/process-part" method="post">
+    
+    <input type="hidden"  value="{{part_number}}" name="part_number" id="part_number" required>
+    <input type="hidden"  value="{{checked_values}}" name="checked_values" id="checked_values" required>
+    <input type="hidden"  value="{{partnum_values_ID}}" name="partnum_values_ID" id="partnum_values_ID" required>
+    <input type="hidden"  value="{{revision_number}}" name="revision_number" id="revision_number" required>
+
+  
+    <!-- Assuming you have a list called 'my_list' containing your items -->
+    <!-- Replace 'my_list' with the actual name of your list -->
+    <table id="dynamicTable">
+    <tr>
+        <!-- Add headers for each input field -->
+        <th>PartNumber</th>
+        <th>PartDescription</th>
+        <th>ClassID</th>
+        <th title="From Vendor quote, not just vender's website">UnitPrice</th>
+        <th title="OK to leave blank however you can enter '1' to force a non custom tool to go through inspection processing">RcvInspectionReq</th>
+
+        <th title="Number of cuting edges. 2 for double ended mills, 2 for 55 deg inserts, 0.5 for whirling inserts, 3 for triangular schwanog other than whirlers, 1 for most other tools">ToolEdges2_C</th>
+        <th title="Category">ToolCat_c</th>
+        <th title="Subcatogory">ToolSubCat_c</th>
+        <th title="Manufacture">ToolMfg_c</th>
+        <th title="Diameter">TDim_c</th>
+        <th title="Diameter UOM">ToolDim_c</th>
+        <th title="Radius">TRad_c</th>
+        <th title="Radius UOM">ToolRad_c</th>
+
+        <th title="degrees, enter any angle relevent to the tool">ToolAng_c</th>
+        <th title="Number of flutes">ToolFlute_c</th>
+        <th title="Flute Length">TFluteLen_c</th>
+        <th title="Flute Length UOM">ToolFluteLen_c</th>
+        <th title="reach">TReach_c</th>
+        <th title="reach UOM/Collet size">ToolReach_c</th>
+        <th title="Shank diameter">TShank_c</th>
+        <th title="Shank diameter UOM">ToolShank_c</th>
+        <th title="Material">ToolMtl_c</th>
+        <th title="Coating">ToolCoat_c</th>
+        <th title="Coolant through? 'If applicable' Enter 0 or 1">ToolCoolant_c</th>
+        <th title="Comment. Could be additional specs, substitue p/n, quote number ect">ToolNotes_c</th>
+
+        <th title="If the tool is not rev-controlled enter a hyphen as the rev">RevisionNum</th>
+        <th title="Brief description of the rev">RevShortDesc</th>
+        <th title="Full description of the rev">RevDescription</th>
+        <th title="25 character limit, optional">DrawNum</th>
+
+        <th>Approved</th>
+        <th>EffectiveDate</th>
+        <th>PartAudit#ChangeDescription</th>
+        <th title="Determines reorder point">MinimumQty</th>
+        <th title="With MinimumQty Determines reorder qty">MaximumQty</th>
+        <th title="Smallest qty the vendor will allow us to purchase">MinOrderQty</th>
+        <th title="Length of time in days, ahead of when its needed by production that we want purchasing to place the order">LeadTime</th>
+        <th title="VendorNum is a required feild in E10">VendorNum</th>
+        
+      </tr>
+      
+
+      <tr>
+        <!-- Generate 9 input fields for each item -->
+        <!-- You can modify the attributes of the input fields as needed -->
+        <td><input type="text" name="PartNumber" value="{{ item }}"></td>
+        <td><input type="text" name="PartDescription" value=""></td>
+        <td><select name="ClassID">
+            <option value="99T">99T</option>
+            <option value="99BT">99BT</option>
+        </select></td>
+        <td><input type="text" name="UnitPrice" value=""></td>
+        <td><select name="ToolEdges2_C">
+            <option value="2">2</option>
+            <option value="0.5">0.5</option>
+            <option value="3">3</option>
+            <option value="1">1</option>
+        </select></td>
+        <td><input type="text" name="RcvInspectionReq" value=""></td>
+        <td><input type="text" name="ToolCat_c" value=""></td>
+        <td><input type="text" name="ToolSubCat_c" value=""></td>
+        <td><input type="text" name="ToolMfg_c" value=""></td>
+        <td><input type="text" name="TDim_c" value=""></td>
+        <td><select name="ToolDim_c">
+            <option value="IN">IN</option>
+            <option value="MM">MM</option>
+        </select></td>
+        <td><input type="text" name="TRad_c" value=""></td>
+        <td><select name="ToolRad_c">
+            <option value="IN">IN</option>
+            <option value="MM">MM</option>
+        </select></td>
+        <td><input type="text" name="ToolAng_c" value=""></td>
+        <td><input type="text" name="ToolFlute_c" value=""></td>
+        <td><input type="text" name="TFluteLen_c" value=""></td>
+        <td><input type="text" name="ToolFluteLen_c" value=""></td>
+        <td><input type="text" name="TReach_c" value=""></td>
+        <td><input type="text" name="ToolReach_c" value=""></td>
+        <td><input type="text" name="TShank_c" value=""></td>
+        <td><select name="ToolShank_c">
+            <option value="IN">IN</option>
+            <option value="MM">MM</option>
+        </select></td>
+        <td><input type="text" name="ToolMtl_c" value=""></td>
+        <td><input type="text" name="ToolCoat_c" value=""></td>
+        <td><select name="ToolCoolant_c">
+            <option value="0">0</option>
+            <option value="1">1</option>
+        </select></td>
+        <td><input type="text" name="Tool_Notes_c" value=""></td>
+
+        <td><input type="text" name="RevisionNum" value=""></td>
+        <td><input type="text" name="RevShortDesc" value=""></td>
+        <td><input type="text" name="RevDescription" value=""></td>
+        <td><input type="text" name="DrawNum" value=""></td>
+        <td><input type="text" name="Approved" value=""></td>
+        <td><input type="text" name="EffectiveDate" value=""></td>
+        <td><input type="text" name="PartAudit#ChangeDescription" value=""></td>
+        <td><input type="text" name="MinimumQty" value=""></td>
+        <td><input type="text" name="MaximumQty" value=""></td>
+        <td><input type="text" name="MinOrderQty" value=""></td>
+        <td><input type="text" name="LeadTime" value=""></td>
+        <td><input type="text" name="VendorNum" value=""></td>
+      </tr>
+      </table>
+      
+  <input type="submit" value="Submit">
+</form>
+
+
+</body>
+</html>

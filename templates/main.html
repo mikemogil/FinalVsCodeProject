@@ -60,13 +60,29 @@
         .form-group input[type="submit"]:hover {
             background-color: #45a049;
         }
+        .create-part-button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 10px;
+            text-align: center;
+            display: block;
+        }
+
+        .create-part-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
-    
     <div class="container">
         <h2>Form Submission</h2>
 
+        <!-- Main Form -->
         <form action="/submit-form" method="post">
             <div class="form-group">
                 <label for="partNumber">Part Number:</label>
@@ -89,8 +105,13 @@
                 <input type="submit" value="Submit">
             </div>
         </form>
-        <img class="corner-image" src="/static/download.png" alt="Corner Image">
+        
+        <!-- Create New Part Button -->
+        <form action="/create-part" method="post">
+            <input type="submit" value="Create New Part" class="create-part-button">
+        </form>
 
+        <img class="corner-image" src="/static/download.png" alt="Corner Image">
     </div>
 </body>
 </html>
