@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 # ***********************************************************************************************************************************  
 
 def get_latest_file_path(partnum, dropdown):
-    parent_directory = r"X:\PROGRAMMING\CUSTOMER"
+    parent_directory = r"\\192.168.10.22\Robo FTP\PROGRAMMING\CUSTOMER"
     filePath = glob.glob(fr"{parent_directory}\{dropdown}\**\*{partnum}*.tls", recursive=True)
     print(dropdown)
     if filePath:

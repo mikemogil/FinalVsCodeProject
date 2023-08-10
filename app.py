@@ -7,7 +7,7 @@ from excelBuilder import NewPart
 from data_file import getJobNum, getInvalids
 import pandas as pd
 
-directory_path = r"X:\PROGRAMMING\CUSTOMER"
+directory_path = r"\\192.168.10.22\Robo FTP\PROGRAMMING\CUSTOMER"
 dropdown = [folder for folder in os.listdir(directory_path) if os.path.isdir(os.path.join(directory_path, folder))]
 
 app = Flask(__name__)
@@ -209,8 +209,8 @@ def success():
         selected_files = eval(selected_files)
         print(len(selected_files),"jobs")
         # part(part_number, revision_number, selected_files)
-        workbook_pathPRB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{part_number},{revision_number}.xlsx'
-        workbook_pathJB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{part_number},{revision_number}.xlsx'
+        workbook_pathPRB = fr'\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{part_number},{revision_number}.xlsx'
+        workbook_pathJB = fr'\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{part_number},{revision_number}.xlsx'
         workbookPRB = openpyxl.load_workbook(workbook_pathPRB)
         workbookJB = openpyxl.load_workbook(workbook_pathJB)
         sheetPRB = workbookPRB.active
@@ -387,15 +387,15 @@ def success():
 
         workbookPRB.save(workbook_pathPRB)
         workbookJB.save(workbook_pathJB)
-        os.remove(fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{part_number},{revision_number}.xlsx')
-        os.remove(fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{part_number},{revision_number}.xlsx')
+        os.remove(fr'\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{part_number},{revision_number}.xlsx')
+        os.remove(fr'\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{part_number},{revision_number}.xlsx')
 
         
 
         df1 = pd.DataFrame(data)
-        df1.to_excel(fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{part_number},{revision_number}.xlsx', index=False)
+        df1.to_excel(fr'\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{part_number},{revision_number}.xlsx', index=False)
         df2 = pd.DataFrame(data2)
-        df2.to_excel(fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{part_number},{revision_number}.xlsx', index=False)
+        df2.to_excel(fr'\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{part_number},{revision_number}.xlsx', index=False)
 
         return render_template('finished.html')
     else:
@@ -410,8 +410,8 @@ def success():
         revision_number = request.args.get('revision_number')
 
         partinfo = part(part_number, revision_number, selected_files, newParts, newPartsDesc)
-        workbook_pathPRB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{part_number},{revision_number}.xlsx'
-        workbook_pathJB = fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{part_number},{revision_number}.xlsx'
+        workbook_pathPRB = fr'\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{part_number},{revision_number}.xlsx'
+        workbook_pathJB = fr'\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{part_number},{revision_number}.xlsx'
 
         workbookPRB = openpyxl.load_workbook(workbook_pathPRB)
         workbookJB = openpyxl.load_workbook(workbook_pathJB)

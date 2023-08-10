@@ -33,7 +33,7 @@ def ExcelFiles(partNumber, partNew, rowsJob, rowsPart,revnum, non_Existing_ID):
     for row in partRevBom.iter_rows(min_row=2):
         for cell in row:
             cell.number_format = "@"
-    prb.save(fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{partNumber},{revnum}.xlsx')
+    prb.save(fr'\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PRB,{partNumber},{revnum}.xlsx')
     for eachJob in rowsJob:
         startSeq = 1020
         for job in all_data:
@@ -49,7 +49,7 @@ def ExcelFiles(partNumber, partNew, rowsJob, rowsPart,revnum, non_Existing_ID):
     for row in jobBom.iter_rows(min_row=2):
         for cell in row:
             cell.number_format = "@"
-    jbm.save(fr'J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{partNumber},{revnum}.xlsx')    
+    jbm.save(fr'\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\JB,{partNumber},{revnum}.xlsx')    
     return partNumber, revnum,all_data, ids
 
 def secondexcelBuilder(workbook_pathPRB, workbook_pathJB, edited_dataPRB, edited_dataJB, newPartNum, newQtyPer, operatingjobs, partNumber, revnum, dataLength):
@@ -141,7 +141,7 @@ def NewPart(partNumber, partDescription, ClasssID, UnitPrice,RcvInspectionReq, T
         "QtyBearing": ["1"] * len(partNumber),
     })
 
-    df.to_excel(fr"J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\Part_DMT_{formatted_datetime}.xlsx", index=False)
+    df.to_excel(fr"\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\Part_DMT_{formatted_datetime}.xlsx", index=False)
     # *************************************************************************************************************************************************************************************************************
     
     data = {
@@ -160,7 +160,7 @@ def NewPart(partNumber, partDescription, ClasssID, UnitPrice,RcvInspectionReq, T
 
     df = pd.DataFrame(data)
 
-    df.to_excel(fr"J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PartRev_DMT_{formatted_datetime}.xlsx", index=False)
+    df.to_excel(fr"\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PartRev_DMT_{formatted_datetime}.xlsx", index=False)
     # *************************************************************************************************************************************************************************************************************
     data = {
         'PartNum': partNumber,
@@ -185,7 +185,7 @@ def NewPart(partNumber, partDescription, ClasssID, UnitPrice,RcvInspectionReq, T
 
     df = pd.DataFrame(data)
 
-    df.to_excel(fr"J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PartPlant_DMT_{formatted_datetime}.xlsx", index=False)
+    df.to_excel(fr"\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PartPlant_DMT_{formatted_datetime}.xlsx", index=False)
     # *************************************************************************************************************************************************************************************************************
     data = {
         'Company': ['JPMC' for _ in partNumber],
@@ -198,7 +198,7 @@ def NewPart(partNumber, partDescription, ClasssID, UnitPrice,RcvInspectionReq, T
 
     df = pd.DataFrame(data)
 
-    df.to_excel(fr"J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PartWhse1_DMT_{formatted_datetime}.xlsx", index=False)
+    df.to_excel(fr"\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PartWhse1_DMT_{formatted_datetime}.xlsx", index=False)
     # *************************************************************************************************************************************************************************************************************
     data = {
         'Company': ['JPMC' for _ in partNumber],
@@ -211,7 +211,7 @@ def NewPart(partNumber, partDescription, ClasssID, UnitPrice,RcvInspectionReq, T
 
     df = pd.DataFrame(data)
 
-    df.to_excel(fr"J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PartWhse2_DMT_{formatted_datetime}.xlsx", index=False)
+    df.to_excel(fr"\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PartWhse2_DMT_{formatted_datetime}.xlsx", index=False)
     # *************************************************************************************************************************************************************************************************************
     data = {
         'Company': ['JPMC' for _ in partNumber],
@@ -223,7 +223,7 @@ def NewPart(partNumber, partDescription, ClasssID, UnitPrice,RcvInspectionReq, T
 
     df = pd.DataFrame(data)
 
-    df.to_excel(fr"J:\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PartBininfo_DMT_{formatted_datetime}.xlsx", index=False)
+    df.to_excel(fr"\\192.168.10.22\JPMCFiles\ERP-Business Intelligence\Bill of Materials (BOM)\BOM output\PartBininfo_DMT_{formatted_datetime}.xlsx", index=False)
     
     return partNumber, partDescription
 
